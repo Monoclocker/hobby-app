@@ -25,7 +25,7 @@ jobs:
     - name: download nginx
       run: docker image pull nginx:latest
     - name: run nginx
-      run: docker -id run nginx:latest -p 80:80
+      run: docker run -id nginx:latest -p 80:80
   setup_postgres:
     runs-on: self-hosted
     needs: setup_nginx
@@ -35,7 +35,7 @@ jobs:
     - name: create volume
       run: docker volume create DBVolume
     - name: run PostgreSQL
-      run: docker -id run postgres:latest -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -v DBVolume:/var/lib/postgresql/data
+      run: docker run -id postgres:latest -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -v DBVolume:/var/lib/postgresql/data
       
   
   
