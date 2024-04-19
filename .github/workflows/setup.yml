@@ -1,0 +1,28 @@
+name: "setup"
+on: 
+  push:
+    branches: ["dotnet", "django", "frontend"]
+jobs:
+  setup_python:
+    runs-on: self-hosted
+    steps:
+    - name: install python
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version: '3.11'
+  setup_dotnet:
+    runs-on: self-hosted
+    steps:
+    - name: install dotnet
+      uses: actions/setup-python@v5.1.0
+      with:
+        dotnet-version: '8.0.204'
+  setup_docker:
+    runs-on: self-hosted
+    steps:
+    - name: docker setup QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: docker setup BuildX
+      uses: docker/setup-buildx-action@v3
+  
+    
