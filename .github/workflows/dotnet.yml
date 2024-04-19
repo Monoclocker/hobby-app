@@ -13,6 +13,10 @@ jobs:
       uses: actions/checkout@v4
     - name: build dotnet application
       run: dotnet publish dotnetWebAPI --os linux --arch x64 --version-suffix new /t:PublishContainer -c Release
+  start:
+    runs-on: self-hosted
+    needs: build
+    steps:
     - name: start dotnet application
       run: docker run -id dotnetWebAPI -e Database={{ secrets.DATABASE }} Issuer={{ secrets.ISSUER }} Key={{ secrets.KEY }} -p 8080:8080 8081:8081 
     
