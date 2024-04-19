@@ -1,0 +1,50 @@
+name: "Setup"
+on: 
+  push:
+    branches: ["dotnet", "django", "frontend"]
+jobs:
+  setup_python:
+    runs-on: self-hosted
+    steps:
+    - name: install python
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version: '3.11'
+  setup_dotnet:
+    runs-on: self-hosted
+    needs: setup_python
+    steps:
+    - name: install dotnet
+      uses: actions/setup-python@v5.1.0
+      with:
+        dotnet-version: '8.0.204'
+  setup_docker:
+    runs-on: self-hosted
+    needs: setup_dotnet
+    steps:
+    - name: docker setup QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: docker setup BuildX
+      uses: docker/setup-buildx-action@v3
+  setup_nginx:
+    runs-on: self-hosted
+    needs: setup_docker
+    steps:
+    - name: download nginx
+      run: docker image pull nginx:latest
+    - name: run nginx
+      run: docker -id run nginx:latest -p 80:80
+  setup_postgres:
+    runs-on: self-hosted
+    needs: setup_nginx
+    steps:
+    - name: download PostgreSQL
+      run: docker image pull postgres:latest
+    - name: create volume
+      run: docker volume create DBVolume
+    - name: run PostgreSQL
+      run: docker -id run postgres:latest -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -v DBVolume:/var/lib/postgresql/data
+      
+  
+  
+    

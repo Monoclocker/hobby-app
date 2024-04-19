@@ -1,0 +1,23 @@
+name: "PythonSetup"
+on:
+  workflow_run:
+    workflows: ["Setup"]
+    branches: ["django"]
+    types:
+      - completed
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: cd
+      uses: actions/checkout@v4
+    - name: build django application
+      run: docker build -t djangoAPI
+  start:
+    runs-on: self-hosted
+    needs: build
+    steps: 
+    - name: start django application
+      run: docker run -id djangoAPI -p 666:8000
+      
+    
