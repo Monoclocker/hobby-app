@@ -9,4 +9,4 @@ jobs:
     - name: install python
       uses: actions/setup-python@v5.1.0
       with:
-        python-version: '3.12'
+        python-version: '3.11'
