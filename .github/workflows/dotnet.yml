@@ -11,10 +11,8 @@ jobs:
     steps:
     - name: cd
       uses: actions/checkout@v4
-    - name: ls
-      run: ls
-    - name: build dotnet application
-      run: dotnet publish dotnetWebAPI --os linux --arch x64 --version-suffix new /t:PublishContainer -c Release
+    - run: ls
+    - run: dotnet publish dotnetWebAPI --os linux --arch x64 --version-suffix new /t:PublishContainer -c Release
   start:
     runs-on: self-hosted
     needs: build
