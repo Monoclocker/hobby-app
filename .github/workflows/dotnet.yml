@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: cd
       uses: actions/checkout@v4
+      with:
+        ref: dotnet
     - name: ls
       run: ls
     - name: build dotnet application
