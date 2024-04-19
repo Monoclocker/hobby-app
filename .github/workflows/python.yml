@@ -1,0 +1,12 @@
+name: "PythonSetup"
+on:
+  push:
+    branches: ["django"]
+jobs:
+  setup:
+    runs-on: self-hosted
+    steps:
+    - name: install python
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version: '3.12'
