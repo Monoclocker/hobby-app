@@ -6,13 +6,14 @@ namespace dotnetWebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
+                
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddConfigurableDependencies(builder.Configuration);
+            builder.Services.AddScopedDependencies();
+            builder.Logging.AddConsole();
 
             var app = builder.Build();
 
@@ -25,9 +26,11 @@ namespace dotnetWebAPI
 
             app.UseHttpsRedirection();
 
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
-
+            app.UseDeveloperExceptionPage();
             app.MapControllers();
 
             app.Run();
