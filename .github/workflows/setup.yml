@@ -1,4 +1,4 @@
-name: "setup"
+name: "Setup"
 on: 
   push:
     branches: ["dotnet", "django", "frontend"]
