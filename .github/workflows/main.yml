@@ -7,7 +7,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: clean up
-        run: docker rm -f dotnetwebapi || true
+        run: docker network rm -f mynet
+      - run: docker network create --subnet=172.0.0.0/16 mynet
+      - run: docker rm -f dotnetwebapi || true
   make_container:
     needs: clear_container
     runs-on: self-hosted
@@ -17,13 +19,3 @@ jobs:
         with:
           ref: dotnet
       - run: dotnet publish dotnetWebAPI --os linux --arch x64 /t:PublishContainer -c Release
-  run_container:
-    needs: make_container
-    runs-on: self-hosted
-    steps:
-      - name: start
-        run: |
-          echo Database={{ secrets.DATABASE }} > config.dn
-          echo Key={{ secrets.KEY }} > config.dn
-          echo Issuer={{ secrets.ISSUER }} > config.dn
-          docker run --ip 172.0.0.1 --name dotnetwebapi -d --env-file config.dn dotnetwebapi
