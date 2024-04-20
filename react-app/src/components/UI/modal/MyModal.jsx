@@ -2,10 +2,18 @@ import React, {useEffect, useState} from 'react';
 import cl from './MyModal.module.css'
 import { MultiSelect } from "react-multi-select-component";
 import RequestService from "../../../api/RequestService.js";
+import Alert from "@mui/material/Alert";
+import {useNavigate} from "react-router-dom";
 
 const MyModal = ({children, firstVisible, setFirstVisible}) => {
+    console.log(children, 228)
+    const navigate = useNavigate();
+
     const [data, setData] = useState(children);
     const [photo, setPhoto] = useState(null);
+    const [message, setMessage] = useState('');
+
+
     const options = [
       { label: "Активный отдых", value: "Активный отдых" },
       { label: "Вечеринки", value: "Вечеринки" },
@@ -35,17 +43,29 @@ const MyModal = ({children, firstVisible, setFirstVisible}) => {
         selected.map((item) => {
             data.interests.push(item.value)
         })
-        data.photo = photo.image_preview;
-        const response = RequestService.updateProfile(data);
-        response.then(val => {
-            if (val.status === 200) {
-                alert('aye')
+        if (photo) {
+            data.photo = photo.image_preview
+        }
+        try {
+            const response = RequestService.updateProfile(data);
+            response.then(val => {
+                if (val.status === 200) {
+                    setMessage('Ваш профиль успешно отредактирован')
+                    window.location.reload();
+                }
+            })
+        } catch (e) {
+            if (e.response.status === 401) {
+                const refresh = async () => {
+                    await RequestService.refreshToken()
+                };
+                console.log(refresh())
+            } else {
+                console.log(e)
+                alert('Сервис временно недоступен :(')
+                navigate("/login");
             }
-        })
-        console.log(data);
-
-
-
+        }
     }
 
     if (firstVisible) {
@@ -62,19 +82,6 @@ const MyModal = ({children, firstVisible, setFirstVisible}) => {
                         <p className="mt-1 text-sm leading-6 text-gray-600">Эта информация будет доступна всем, так что
                             будьте осторожны :).</p>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-4">
-                                <label htmlFor="username"
-                                       className="block text-sm font-medium leading-6 text-gray-900">Username</label>
-                                <div className="mt-1">
-                                    <div
-                                        className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                        <input value={data.username} type="text" name="username" id="username" autoComplete="username"
-                                               onChange={(e) => setData({...data, username: e.target.value})}
-                                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                               placeholder="janesmith"/>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div className="col-span-full border-b border-gray-900/10">
                                 <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">Обо
@@ -134,7 +141,8 @@ const MyModal = ({children, firstVisible, setFirstVisible}) => {
                                 <label htmlFor="city"
                                        className="block text-sm font-medium leading-6 text-gray-900">Город</label>
                                 <div className="mt-100">
-                                    <input type="text" name="city" id="city" autoComplete="address-level2"
+                                    <input value={data.cityName} type="text" name="city" id="city" autoComplete="address-level2"
+                                           onChange={(e) => setData({...data, cityName: e.target.value})}
                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                                 </div>
                             </div>

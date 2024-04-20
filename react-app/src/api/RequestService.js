@@ -9,8 +9,13 @@ const url = 'http://194.87.102.174';
 
 export default class RequestService {
     static async registration(userData) {
+<<<<<<< HEAD
         return await axios.post(url + '/Auth/Register', {
             ...userData,
+=======
+        return await axios.post(url + "/Auth/Register", {
+          ...userData
+>>>>>>> 5afd8c7cda7c06de0f2c7bac1c602ad8f3b5e15b
         });
     }
 
@@ -21,6 +26,11 @@ export default class RequestService {
         localStorage.setItem('accessToken', response.data['accessToken']);
         console.log(response.data['accessToken']);
         localStorage.setItem('refreshToken', response.data['refreshToken']);
+        config = {
+            headers: {
+                Authorization:  "Bearer " + localStorage.getItem("accessToken"),
+            }
+        }
     }
 
     static async authorization(userData) {
