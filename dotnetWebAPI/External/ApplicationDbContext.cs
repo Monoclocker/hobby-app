@@ -12,7 +12,6 @@ namespace dotnetWebAPI.External
 
         public DbSet<Interest> Interests { get; set; } = default!;
 
-        public DbSet<Profile> Profiles { get; set; } = default!;
         public DbSet<City> Cities { get; set; } = default!;
 
         public DbSet<SocialLink> SocialLinks { get; set; } = default!;
@@ -25,6 +24,8 @@ namespace dotnetWebAPI.External
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.Property(e => e.Age).IsRequired();
+                entity.Property(e => e.PhotoPath).HasDefaultValue("default.png");
                 entity.HasKey(e => e.Id);
                 entity.HasAlternateKey(e => e.Username);
 
@@ -51,6 +52,15 @@ namespace dotnetWebAPI.External
 
                 entity.Property(e => e.SecurityTimeStamp)
                 .HasDefaultValue(DateTime.UtcNow);
+
+                entity
+                .HasOne(e => e.City)
+                .WithMany(e => e.Profiles);
+
+                entity
+                .HasMany(e => e.Interests)
+                .WithMany(e => e.Profiles);
+
             });
 
             modelBuilder.Entity<Group>(entity =>
@@ -60,23 +70,6 @@ namespace dotnetWebAPI.External
                 entity
                 .HasMany(e=>e.GroupUsers)
                 .WithMany(e=>e.Groups);
-
-            });
-
-            modelBuilder.Entity<Profile>(entity =>
-            {
-                entity.HasKey(e => e.Username);
-                entity.Property(e=>e.Age).IsRequired();
-                entity.Property(e => e.PhotoPath).HasDefaultValue("default.png");
-
-
-                entity
-                .HasMany(e => e.Interests)
-                .WithMany(e => e.Profiles);
-
-                entity
-                .HasOne(e => e.City)
-                .WithMany(e => e.Profiles);
 
             });
 

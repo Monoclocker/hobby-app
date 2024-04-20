@@ -17,12 +17,10 @@ namespace dotnetWebAPI.Services
 
         public async Task<ProfileDTO> GetProfile(string username)
         {
-            Profile? findedProfile = await dbContext.Profiles
-                .Include(x => x.UserNavigation)
-                .Include(x => x.City)
-                .Include(x => x.SocialLinks)
-                .Include(x => x.Interests)
-                .FirstOrDefaultAsync(x => x.UserNavigation.Username == username);
+            Console.WriteLine(username);
+            User? findedProfile = await dbContext.Users
+                .Include(x=>x.City)
+                .FirstOrDefaultAsync(x => x.Username == username);
 
             if (findedProfile == null)
             {
@@ -35,7 +33,6 @@ namespace dotnetWebAPI.Services
                 photo = findedProfile.PhotoPath,
                 age = findedProfile.Age,
                 cityName = findedProfile.City.Name,
-                
             };
 
             string links = "";
@@ -59,7 +56,7 @@ namespace dotnetWebAPI.Services
 
         public async Task UpdateProfile(ProfileDTO dto)
         {
-            Profile? profile = await dbContext.Profiles.FirstOrDefaultAsync(x => x.Username == dto.username);
+            User? profile = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == dto.username);
 
             if (profile == null)
             {
@@ -91,8 +88,8 @@ namespace dotnetWebAPI.Services
 
         public async Task AddSocialLink(string type, string link, string username)
         {
-            Profile? findedProfile = await dbContext.Profiles
-                .FirstOrDefaultAsync(x => x.UserNavigation.Username == username);
+            User? findedProfile = await dbContext.Users
+                .FirstOrDefaultAsync(x => x.Username == username);
 
             if (findedProfile == null)
             {

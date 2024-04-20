@@ -51,23 +51,24 @@ namespace dotnetWebAPI
 
         }
 
-        public static void AddStartConfiguration(ApplicationDbContext context)
+        public static async Task AddStartConfiguration(ApplicationDbContext context)
         {
             string[] arrayOfInterest = ["Активный отдых", "Вечеринки", "Алкоголь", "Спорт", "Кофе", "Настольные игры", "Квесты", "Кино", "Книги"];
-            string[] arrayOfCities = ["Ростов-на-Дону", "Москва"];
+            string[] arrayOfCities = ["Ростов-на-Дону", "Москва", "string"];
 
             foreach (var interest in arrayOfInterest)
             {
-                if (context.Interests.Where(x => x.Name == interest).Any())
+                if (!context.Interests.Where(x => x.Name == interest).Any())
                     context.Interests.Add(new Interest() { Name = interest });
+                
             }
 
             foreach (var city in arrayOfCities)
             {
-                if (context.Cities.Where(x => x.Name == city).Any())
+                if (!context.Cities.Where(x => x.Name == city).Any())
                     context.Cities.Add(new City() { Name = city });
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

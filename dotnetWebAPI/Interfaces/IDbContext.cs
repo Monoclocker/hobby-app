@@ -9,8 +9,6 @@ namespace dotnetWebAPI.Interfaces
 
         public DbSet<Group> Groups { get; set; }
 
-        public DbSet<Profile> Profiles { get; set; }
-
         public DbSet<Interest> Interests { get; set; }
 
         public DbSet<City> Cities { get; set; }

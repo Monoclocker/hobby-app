@@ -1,6 +1,6 @@
 @dotnetWebAPI_HostAddress = http://localhost:5022
 
-GET {{dotnetWebAPI_HostAddress}}/weatherforecast/
+GET {{dotnetWebAPI_HostAddress}}/Profiles/GetProfile
 Accept: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN0cmluZyIsIm5iZiI6MTcxMzYzMjM0NywiZXhwIjoxNzEzNjMyNjQ3LCJpYXQiOjE3MTM2MzIzNDcsImlzcyI6IkhvYmJ5QXBwIn0.grNj4pQJUYbJGlv8_c6y7XvSsgSEFo1AE8W-l0iPbCY
 ###

@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public required string Type { get; set; }
         public required string Link { get; set; }
-        public Profile Profile { get; set; } = default!;
+        public User Profile { get; set; } = default!;
     }
 }

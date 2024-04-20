@@ -5,7 +5,7 @@ namespace dotnetWebAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
                 
@@ -35,8 +35,7 @@ namespace dotnetWebAPI
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
-                context.SaveChanges();
-                DependencyInjection.AddStartConfiguration(context);
+                await DependencyInjection.AddStartConfiguration(context);
             }
 
             app.UseHttpsRedirection();

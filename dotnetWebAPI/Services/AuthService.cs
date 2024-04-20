@@ -2,7 +2,6 @@
 using dotnetWebAPI.Exceptions;
 using dotnetWebAPI.Interfaces;
 using dotnetWebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnetWebAPI.Services
@@ -25,14 +24,10 @@ namespace dotnetWebAPI.Services
             {
                 Username = dto.username,
                 Email = dto.email,
-                Password = dto.password
-            };
-
-            Profile newProfile = new Profile()
-            {
+                Password = dto.password,
                 About = dto.about,
                 Age = dto.age,
-                City = (await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName))!
+                CityID = (await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName))!.Id
             };
 
             await dbContext.Users.AddAsync(newUser);
