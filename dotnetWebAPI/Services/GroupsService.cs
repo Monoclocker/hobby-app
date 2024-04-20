@@ -2,7 +2,6 @@
 using dotnetWebAPI.Exceptions;
 using dotnetWebAPI.Interfaces;
 using dotnetWebAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnetWebAPI.Services
@@ -19,15 +18,16 @@ namespace dotnetWebAPI.Services
         //переписать асинхронно
         public async Task<List<GroupCreationDTO>> GetAllGroups(string userName)
         {
-            User? user = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == userName);
+            User? user = await dbContext.Users
+                .Include(x => x.GroupsUsers)
+                .FirstOrDefaultAsync(x => x.Username == userName);
 
             if (user == null)
             {
-                throw new Exception();
+                throw new UserUnknownException();
             }
 
             List<GroupsUsers> query = user.GroupsUsers.ToList();
-
 
             List<GroupCreationDTO> collection = new List<GroupCreationDTO>();
 
