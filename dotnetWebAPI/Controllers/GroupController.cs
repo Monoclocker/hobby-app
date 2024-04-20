@@ -50,19 +50,19 @@ namespace dotnetWebAPI.Controllers
             return Ok(groups);
         }
 
+        public record class UsernameDTO(string username);
+        
         [HttpPost("Add/{id}")]
-        public async Task<IActionResult> AddToGroup(int id)
+        public async Task<IActionResult> AddToGroup(UsernameDTO dto, int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
-
             try
             {
-                await groupsService.AddToGroupById(username, id);
+                await groupsService.AddToGroupById(dto.username, id);
                 return Ok();
             }
             catch
@@ -93,7 +93,7 @@ namespace dotnetWebAPI.Controllers
             }
         }
 
-        [HttpDelete("Remove/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteGroup(int id)
         {
 
