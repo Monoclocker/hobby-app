@@ -28,6 +28,7 @@ jobs:
           echo Issuer={{ secrets.ISSUER }} > config.dn
           docker run --ip 172.0.0.1 --name dotnetwebapi -d --env-file config.dn dotnetwebapi
           docker exec -i dotnetwebapi bash
-          dotnet ef migrations add initial
           echo $Issuer
+          ls
+          dotnet ef migrations add initial
           exit
