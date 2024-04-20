@@ -33,8 +33,8 @@ namespace dotnetWebAPI
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                Console.WriteLine(builder.Configuration["Database"]);
                 context.Database.EnsureCreated();
+                DependencyInjection.AddStartConfiguration(context);
             }
 
             app.UseHttpsRedirection();

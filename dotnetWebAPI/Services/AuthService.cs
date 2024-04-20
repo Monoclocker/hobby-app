@@ -19,7 +19,7 @@ namespace dotnetWebAPI.Services
             this.dbContext = dbContext;
         }
 
-        public async Task RegisterUser(UserRegisterDTO dto, [FromForm] IFormFile? photo=null)
+        public async Task RegisterUser(UserRegisterDTO dto)
         {
             User newUser = new User()
             {
@@ -34,15 +34,6 @@ namespace dotnetWebAPI.Services
                 Age = dto.age,
                 City = (await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName))!
             };
-
-            if (photo != null)
-            {
-                using (FileStream fs = new FileStream(photo.FileName, FileMode.CreateNew))
-                {
-                    await photo.CopyToAsync(fs);
-                }
-                newProfile.PhotoPath = photo.FileName;
-            }
 
             await dbContext.Users.AddAsync(newUser);
 
