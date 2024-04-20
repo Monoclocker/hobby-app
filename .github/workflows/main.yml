@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: start
         run: |
-          docker run --ip 172.0.0.1 --name dotnetwebapi -e Database={{ secrets.DATABASE }} Key={{ secrets.KEY }} Issuer={{ secrets.ISSUER }} dotnetwebapi
+          docker run --ip 172.0.0.1 --name dotnetwebapi -e Database={{ secrets.DATABASE }} -e Key={{ secrets.KEY }} -e Issuer={{ secrets.ISSUER }} dotnetwebapi
           docker exec -i dotnet bash
           dotnet ef migrations add initial
           exit
