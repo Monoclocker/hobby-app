@@ -29,8 +29,18 @@ namespace dotnetWebAPI.Services
                 About = dto.about,
                 Age = dto.age,
                 CityID = (await dbContext.Cities.FirstOrDefaultAsync(x => x.Name == dto.cityName))!.Id,
-                Photo = dto.photo
+                Photo = dto.photo,
             };
+
+            List<Interest> interests = new List<Interest>();
+
+            foreach (var interest in dto.interests)
+            {
+                Console.WriteLine(interest);
+                interests.Add(dbContext.Interests.First(x => x.Name == interest));
+            }
+
+            newUser.Interests.AddRange(interests);
 
             await dbContext.Users.AddAsync(newUser);
 

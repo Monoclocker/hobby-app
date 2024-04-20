@@ -17,9 +17,9 @@ namespace dotnetWebAPI.Services
 
         public async Task<ProfileDTO> GetProfile(string username)
         {
-            Console.WriteLine(username);
             User? findedProfile = await dbContext.Users
                 .Include(x=>x.City)
+                .Include(x=>x.Interests)
                 .FirstOrDefaultAsync(x => x.Username == username);
 
             if (findedProfile == null)
@@ -43,9 +43,15 @@ namespace dotnetWebAPI.Services
                 links += "type:" + Links.Type + "link:" + Links.Link + ";";
             }
 
-            foreach (var interest in  findedProfile.Interests) 
+            foreach (var interest in findedProfile.Interests) 
             {
                 profile.interests.Add(interest.Name);
+                Console.WriteLine(interest.Name);
+            }
+
+            foreach (var interest in profile.interests)
+            {
+                Console.WriteLine(interest);
             }
 
             links.TrimEnd(';');
@@ -57,7 +63,7 @@ namespace dotnetWebAPI.Services
 
         public async Task UpdateProfile(ProfileDTO dto)
         {
-            User? profile = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == dto.username);
+            User? profile = await dbContext.Users.Include(x=>x.Interests).FirstOrDefaultAsync(x => x.Username == dto.username);
 
             if (profile == null)
             {
@@ -74,15 +80,15 @@ namespace dotnetWebAPI.Services
                 profile.City = await dbContext.Cities.FirstAsync(x => x.Name == dto.cityName);
             }
 
-            List<Interest> newInterests = new List<Interest>();
+            profile.Interests.Clear();
+
+            dbContext.Users.Update(profile);
 
             foreach (var name in dto.interests)
             {
-                var interest = await dbContext.Interests.FirstOrDefaultAsync(x=>x.Name==name);
-                newInterests.Add(interest!);
+                var interest = dbContext.Interests.First(x=>x.Name==name);
+                profile.Interests.Add(interest);
             }
-
-            profile.Interests = newInterests;
 
             if (dto.age > 0)
             {
@@ -93,6 +99,8 @@ namespace dotnetWebAPI.Services
             {
                 profile.Photo = dto.photo;
             }
+
+            dbContext.Users.Update(profile);
 
             await dbContext.SaveChangesAsync();
         }
