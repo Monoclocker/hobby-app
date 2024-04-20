@@ -3,37 +3,37 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import RequestService from "../../api/RequestService.js";
 import Alert from "@mui/material/Alert";
-import {useFetching} from "../../hooks/useFetching.js";
+import { useFetching } from "../../hooks/useFetching.js";
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [messageAuth, setMessageAuth] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [messageAuth, setMessageAuth] = useState("");
 
-    const userData = { username: username, password: password };
+  const userData = { username: username, password: password };
 
-    const [logIn, isLoading, eventError] = useFetching(async () => {
-        const response = await RequestService.authorization(userData);
-        console.log(response)
-        if (response.status === 200) {
-            navigate("/profile");
-            localStorage.setItem('accessToken', response.data['accessToken']);
-            localStorage.setItem('refreshToken', response.data['refreshToken']);
-        } else {
-            setMessageAuth("Неправильно введён логин или пароль!");
-            setTimeout(() => {
-              setMessageAuth("");
-            }, 2000);
-        }
-    });
-
-    const login = (e) => {
-        e.preventDefault();
-        logIn();
+  const [logIn, isLoading, eventError] = useFetching(async () => {
+    try {
+      const response = await RequestService.authorization(userData);
+      if (response.status === 200) {
+        navigate("/groups");
+        localStorage.setItem("accessToken", response.data["accessToken"]);
+        localStorage.setItem("refreshToken", response.data["refreshToken"]);
+      }
+    } catch (e) {
+      setMessageAuth("Неправильно введён логин или пароль!");
+      setTimeout(() => {
+        setMessageAuth("");
+      }, 2000);
     }
+  });
 
+  const login = (e) => {
+    e.preventDefault();
+    logIn();
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
