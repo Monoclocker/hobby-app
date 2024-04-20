@@ -19,19 +19,27 @@ namespace dotnetWebAPI.Services
         //переписать асинхронно
         public async Task<List<GroupCreationDTO>> GetAllGroups(string userName)
         {
-            
-            IQueryable<Group> query = dbContext.Groups
-                .AsNoTracking()
-                .Include(x=>x.GroupsUsers)
-                .Where(x=>x.GroupUsers.Any(x=>x.Username == userName));
+            User? user = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == userName);
+
+            if (user == null)
+            {
+                throw new Exception();
+            }
+
+            List<GroupsUsers> query = user.GroupsUsers.ToList();
+
 
             List<GroupCreationDTO> collection = new List<GroupCreationDTO>();
 
-            List<Group> groups = query.AsEnumerable().ToList();
 
-            foreach(var element in groups)
+            foreach (var element in query)
             {
-                collection.Add(new GroupCreationDTO() { groupName = element.Name, id = element.Id, isAdmin = element.GroupsUsers.Single(x=>x.User.Username == userName).IsAdmin});
+
+                bool isAdmin = element.IsAdmin;
+
+                Group group = await dbContext.Groups.FirstAsync(x => x.Id == element.GroupId);
+
+                collection.Add(new GroupCreationDTO() { groupName = group.Name, id = group.Id, isAdmin = isAdmin });
             }
 
             return collection;
