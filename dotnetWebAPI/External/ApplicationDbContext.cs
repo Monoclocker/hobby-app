@@ -25,7 +25,6 @@ namespace dotnetWebAPI.External
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Age).IsRequired();
-                entity.Property(e => e.PhotoPath).HasDefaultValue("default.png");
                 entity.HasKey(e => e.Id);
                 entity.HasAlternateKey(e => e.Username);
 
@@ -85,13 +84,6 @@ namespace dotnetWebAPI.External
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
             });
-
-
-
         }
-
-        
-
-
     }
 }

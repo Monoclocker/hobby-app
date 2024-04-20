@@ -6,5 +6,6 @@ namespace dotnetWebAPI.Interfaces
     {
         Task RegisterUser(UserRegisterDTO dto);
         Task<TokensDTO> LoginUser(UserLoginDTO dto);
+        TokensDTO RefreshToken(TokensDTO token);
     }
 }

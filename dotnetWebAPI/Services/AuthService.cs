@@ -3,6 +3,7 @@ using dotnetWebAPI.Exceptions;
 using dotnetWebAPI.Interfaces;
 using dotnetWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace dotnetWebAPI.Services
 {
@@ -53,8 +54,25 @@ namespace dotnetWebAPI.Services
             };
 
             return tokens;
-
         }
 
+        public TokensDTO RefreshToken(TokensDTO token)
+        {
+
+            var claims = tokenService.VerifyToken(token.refreshToken!);
+
+            if (claims == null)
+            {
+                throw new Exception();
+            }
+
+            string username = claims.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
+
+            return new TokensDTO()
+            {
+                accessToken = tokenService.GenerateToken(new UserLoginDTO() { username = username, password = " " }, 60),
+                refreshToken = tokenService.GenerateToken(new UserLoginDTO() { username = username, password = " " }, 6000)
+            };
+        } 
     }
 }

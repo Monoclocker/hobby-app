@@ -43,7 +43,7 @@ namespace dotnetWebAPI.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public bool VerifyToken(string token)
+        public ClaimsPrincipal? VerifyToken(string token)
         {
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
@@ -63,15 +63,15 @@ namespace dotnetWebAPI.Services
             {
                 try
                 {
-                    handler.ValidateToken(token, validationParameters, out verifiedToken);
+                    ClaimsPrincipal claims = handler.ValidateToken(token, validationParameters, out verifiedToken);
+                    return claims;
                 }
                 catch
                 {
-                    return false;
+                    return null;
                 }
             }
-
-            return true;
+            return null;
         }
 
     }

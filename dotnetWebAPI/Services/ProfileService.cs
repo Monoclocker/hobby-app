@@ -30,7 +30,7 @@ namespace dotnetWebAPI.Services
             ProfileDTO profile = new ProfileDTO()
             {
                 about = findedProfile.About,
-                photo = findedProfile.PhotoPath,
+                photo = findedProfile.Photo,
                 age = findedProfile.Age,
                 cityName = findedProfile.City.Name,
             };
@@ -80,7 +80,7 @@ namespace dotnetWebAPI.Services
 
             if (dto.photo != null)
             {
-                profile.PhotoPath = dto.photo;
+                profile.Photo = dto.photo;
             }
 
             await dbContext.SaveChangesAsync();

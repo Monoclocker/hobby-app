@@ -47,27 +47,38 @@ namespace dotnetWebAPI.Controllers
                 return BadRequest();
             }
 
+           
+
             try
             {
                 if (photo != null)
                 {
-                    using (FileStream fs = new FileStream(photo.FileName, FileMode.CreateNew))
-                    {
-                        await photo.CopyToAsync(fs);
-                    }
-                    dto.photo = photo.FileName;
+                    byte[] bytes = new byte[photo.Length];
+                    dto.photo = bytes;
                 }
                 await authService.RegisterUser(dto);
                 return Ok();
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, ex.Message);
                 return BadRequest();
             }
-
         }
 
+        [HttpPost("Refresh")]
+        public IActionResult Refresh(TokensDTO dto)
+        {
+            try
+            {
+                TokensDTO tokens = authService.RefreshToken(dto);
+                return Ok(tokens);
+            }
+            catch
+            {
+                return Forbid();
+            }
+        }
     }
 }

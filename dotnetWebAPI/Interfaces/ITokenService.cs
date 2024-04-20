@@ -1,10 +1,11 @@
 ﻿using dotnetWebAPI.DTO;
+using System.Security.Claims;
 
 namespace dotnetWebAPI.Interfaces
 {
     public interface ITokenService
     {
         string GenerateToken(UserLoginDTO dto, int lifeDuration);
-        bool VerifyToken(string token);
+        ClaimsPrincipal? VerifyToken(string token);
     }
 }
