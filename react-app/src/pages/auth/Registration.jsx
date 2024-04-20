@@ -2,38 +2,38 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
-import RequestService from "../../api.config";
+import RequestService from "../../api/RequestService";
+import {useFetching} from "../../hooks/useFetching.js";
 
 const Registration = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [city, setCity] = useState("");
-  const [isRegister, setRegister] = useState(0); // Проверка успешно ли пользователь прошёл регистрацию
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [city, setCity] = useState("");
+    const [isRegister, setRegister] = useState(0); // Проверка успешно ли пользователь прошёл регистрацию
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const user = { username: username, email: email, password: password };
-    await RequestService.registrationNet(user)
-      .then((resp) => {
-        console.log("Пользователь успешно зарегистрирован!", resp.status);
-        setRegister(resp.status);
-        setTimeout(() => {
-          navigate("/", { replace: true });
-        }, 1000);
-      })
-      .catch((error) => {
-        console.log("Ошибка!", error);
-        if (error.response.status === 400) {
-          setRegister(error.response.status);
-          setTimeout(() => {
-            setRegister(0);
-          }, 2000);
+    const [register, isLoading, eventError] = useFetching(async () => {
+        const user = { username: username, email: email, password: password };
+        const response = await RequestService.registration(user);
+        console.log(response);
+        setRegister(response.status);
+        if (response.status === 200) {
+            console.log("Пользователь успешно зарегистрирован!", response.status);
+            setTimeout(() => {
+              navigate("/login", { replace: true });
+            }, 1000);
+        } else {
+
+            navigate("/register", { replace: true });
         }
-      });
-  };
+    })
+
+    const registration = (e) => {
+        e.preventDefault();
+        register();
+    }
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -44,7 +44,7 @@ const Registration = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" method="POST" onSubmit={handleSubmit}>
+        <form className="space-y-6" method="POST" onSubmit={registration}>
           {isRegister === 200 && (
             <Alert severity="success">
               <strong>Успешно!</strong>

@@ -1,35 +1,37 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import RequestService from "../../api.config";
+import RequestService from "../../api/RequestService.js";
 import Alert from "@mui/material/Alert";
+import {useFetching} from "../../hooks/useFetching.js";
 
-const username = () => {
-  const navigate = useNavigate();
+const Login = () => {
+    const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [messageAuth, setMessageAuth] = useState("");
-
-  const handleClickSubmit = async (e) => {
-    e.preventDefault();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [messageAuth, setMessageAuth] = useState("");
 
     const userData = { username: username, password: password };
 
-    await RequestService.authorizationNet(userData)
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.status);
-        navigate("/profile");
-      })
-      .catch(() => {
-        setMessageAuth("Неправильно введён логин или пароль!");
+    const [logIn, isLoading, eventError] = useFetching(async () => {
+        const response = await RequestService.authorization(userData);
+        console.log(response)
+        if (response.status === 200) {
+            navigate("/profile");
+        } else {
+            setMessageAuth("Неправильно введён логин или пароль!");
+            setTimeout(() => {
+              setMessageAuth("");
+            }, 2000);
+        }
+    });
 
-        setTimeout(() => {
-          setMessageAuth("");
-        }, 2000);
-      });
-  };
+    const login = (e) => {
+        e.preventDefault();
+        logIn();
+    }
+
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -40,7 +42,7 @@ const username = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" method="POST" onSubmit={handleClickSubmit}>
+        <form className="space-y-6" method="POST" onSubmit={login}>
           {messageAuth !== "" && (
             <Alert severity="error">
               <strong>{messageAuth}</strong>
@@ -113,4 +115,4 @@ const username = () => {
   );
 };
 
-export default username;
+export default Login;
