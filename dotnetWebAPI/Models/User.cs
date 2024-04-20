@@ -10,6 +10,7 @@
         public DateTime SecurityTimeStamp { get; set; }
         public bool IsBlocked { get; set; }
         public List<Group> Groups { get; set; } = new List<Group>();
+        public Profile? Profile { get; set; }
 
     }
 }

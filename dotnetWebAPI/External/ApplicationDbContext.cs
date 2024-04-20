@@ -10,6 +10,11 @@ namespace dotnetWebAPI.External
 
         public DbSet<Group> Groups { get; set; } = default!;
 
+        public DbSet<Interest> Interests { get; set; } = default!;
+
+        public DbSet<Profile> Profiles { get; set; } = default!;
+        public DbSet<City> Cities { get; set; } = default!;
+
         public ApplicationDbContext(DbContextOptions options): base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,7 +57,51 @@ namespace dotnetWebAPI.External
                 entity
                 .HasMany(e=>e.GroupUsers)
                 .WithMany(e=>e.Groups);
+
+                entity
+                .HasMany(e => e.Interests)
+                .WithMany(e=>e.Groups);
+
             });
+
+            modelBuilder.Entity<Profile>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e=>e.Surname).IsRequired();
+                entity.Property(e=>e.Age).IsRequired();
+                entity.Property(e => e.PhotoPath).HasDefaultValue("default.png");
+
+                entity
+                .HasOne(e => e.UserNavigation)
+                .WithOne(e => e.Profile);
+
+                entity
+                .HasMany(e => e.Interests)
+                .WithMany(e => e.Profiles);
+
+                entity
+                .HasOne(e => e.City)
+                .WithMany(e => e.Profiles);
+
+            });
+
+            modelBuilder.Entity<City>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Interest>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Name).IsRequired();
+
+            });
+
+
 
         }
 

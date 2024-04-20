@@ -9,7 +9,12 @@ namespace dotnetWebAPI.Interfaces
 
         public DbSet<Group> Groups { get; set; }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        public DbSet<Profile> Profiles { get; set; }
 
+        public DbSet<Interest> Interests { get; set; }
+
+        public DbSet<City> Cities { get; set; }
+
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
