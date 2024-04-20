@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../api/RequestService';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const CreateGroupForm = ({ modalOpen, setModalOpen }) => {
     const [groupName, setGroupName] = useState('');
@@ -21,14 +21,14 @@ const CreateGroupForm = ({ modalOpen, setModalOpen }) => {
     const handleCreateGroup = async (e) => {
         e.preventDefault();
         try {
-            console.log()
-            await RequestService.createGroup({groupName: groupName});
+            await RequestService.createGroup({ groupName: groupName });
         } catch (e) {
             if (e.response.status === 401) {
                 await RequestService.refreshToken();
                 navigate('/groups');
             }
         }
+        window.location.reload();
         setModalOpen(!modalOpen);
     };
     return (
