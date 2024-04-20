@@ -203,20 +203,7 @@ const Navbar = () => {
                                     >
                                         Ваш профиль
                                     </Link>
-                                    <Link
-                                        to="#"
-                                        onClick={() => {
-                                            setOpenMenu(!openMenu);
-                                            setActiveLink(0);
-                                            sessionStorage.setItem('activeLink', 0);
-                                        }}
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                        tabIndex="-1"
-                                        id="user-menu-item-1"
-                                    >
-                                        Настройки
-                                    </Link>
+
                                     <Link
                                         to="#"
                                         onClick={() => {
@@ -241,7 +228,7 @@ const Navbar = () => {
                 <div className="sm:hidden" id="mobile-menu">
                     <div className="space-y-1 px-2 pb-3 pt-2">
                         <Link
-                            to="/feed"
+                            to="/groups"
                             className={
                                 activeLink === 1 ? classNameNavbar.activeLinkMobile : classNameNavbar.inactiveLinkMobile
                             }
