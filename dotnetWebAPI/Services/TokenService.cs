@@ -17,8 +17,6 @@ namespace dotnetWebAPI.Services
             this.configuration = configuration;
         }
 
-
-
         public string GenerateToken(UserLoginDTO dto, int lifeDurationSeconds)
         {
 

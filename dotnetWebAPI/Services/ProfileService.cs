@@ -20,6 +20,7 @@ namespace dotnetWebAPI.Services
             User? findedProfile = await dbContext.Users
                 .Include(x=>x.City)
                 .Include(x=>x.Interests)
+                .Include(x=>x.SocialLinks)
                 .FirstOrDefaultAsync(x => x.Username == username);
 
             if (findedProfile == null)
@@ -36,34 +37,25 @@ namespace dotnetWebAPI.Services
                 cityName = findedProfile.City.Name,
             };
 
-            string links = "";
-
+            
             foreach (var Links in findedProfile.SocialLinks)
             {
-                links += "type:" + Links.Type + "link:" + Links.Link + ";";
+                profile.links!.Add(Links.Link);
             }
 
             foreach (var interest in findedProfile.Interests) 
             {
-                profile.interests.Add(interest.Name);
-                Console.WriteLine(interest.Name);
+                profile.interests!.Add(interest.Name);
             }
-
-            foreach (var interest in profile.interests)
-            {
-                Console.WriteLine(interest);
-            }
-
-            links.TrimEnd(';');
-
-            profile.links = links;
 
             return profile;
         }
 
         public async Task UpdateProfile(ProfileDTO dto)
         {
-            User? profile = await dbContext.Users.Include(x=>x.Interests).FirstOrDefaultAsync(x => x.Username == dto.username);
+            User? profile = await dbContext.Users
+                .Include(x=>x.Interests)
+                .FirstOrDefaultAsync(x => x.Username == dto.username);
 
             if (profile == null)
             {
@@ -80,14 +72,28 @@ namespace dotnetWebAPI.Services
                 profile.City = await dbContext.Cities.FirstAsync(x => x.Name == dto.cityName);
             }
 
-            profile.Interests.Clear();
-
-            dbContext.Users.Update(profile);
-
-            foreach (var name in dto.interests)
+            if (dto.interests != null)
             {
-                var interest = dbContext.Interests.First(x=>x.Name==name);
-                profile.Interests.Add(interest);
+                profile.Interests.Clear();
+
+                foreach (var name in dto.interests!)
+                {
+                    var interest = dbContext.Interests.First(x => x.Name == name);
+                    profile.Interests.Add(interest);
+                }
+            }
+
+            if (dto.links != null)
+            {
+                profile.SocialLinks.Clear();
+                foreach (var link in profile.SocialLinks)
+                {
+                    profile.SocialLinks.Remove(link);
+                }
+                foreach (var linkname in dto.links!)
+                {
+                    profile.SocialLinks.Add(new SocialLink() { Link = linkname });
+                }
             }
 
             if (dto.age > 0)
@@ -115,7 +121,7 @@ namespace dotnetWebAPI.Services
                 throw new UnknownUserException();
             }
 
-            findedProfile.SocialLinks.Add(new SocialLink() { Link = link, Type = type });
+            findedProfile.SocialLinks.Add(new SocialLink() { Link = link });
 
             await dbContext.SaveChangesAsync();
         }

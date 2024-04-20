@@ -36,7 +36,6 @@ namespace dotnetWebAPI.Services
 
             foreach (var interest in dto.interests)
             {
-                Console.WriteLine(interest);
                 interests.Add(dbContext.Interests.First(x => x.Name == interest));
             }
 
