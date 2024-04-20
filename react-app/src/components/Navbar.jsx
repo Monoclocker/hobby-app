@@ -113,7 +113,7 @@ const Navbar = () => {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 <Link
-                  to="/feed"
+                  to="/groups"
                   className={
                     activeLink === 1
                       ? classNameNavbar.activeLinkDesktop
@@ -125,7 +125,7 @@ const Navbar = () => {
                   }}
                   aria-current="page"
                 >
-                  Лента
+                  Группы
                 </Link>
                 <Link
                   to="/messenger"
@@ -139,7 +139,7 @@ const Navbar = () => {
                     sessionStorage.setItem("activeLink", 2);
                   }}
                 >
-                  Мессенджер
+                  Карта
                 </Link>
               </div>
             </div>
@@ -259,7 +259,7 @@ const Navbar = () => {
               }}
               aria-current="page"
             >
-              Лента
+              Группы
             </Link>
             <Link
               to="/messenger"
@@ -273,7 +273,7 @@ const Navbar = () => {
                 sessionStorage.setItem("activeLink", 2);
               }}
             >
-              Мессенджер
+              Карты
             </Link>
           </div>
         </div>
