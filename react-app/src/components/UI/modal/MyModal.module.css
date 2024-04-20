@@ -1,0 +1,40 @@
+.myModal.active {
+    display: flex;
+    z-index: 10 !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.myModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.myModalContent {
+    padding: 15px;
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    padding-left: 100px;
+    padding-right: 100px;
+    /*height: 10%;*/
+    overflow: auto;
+}
+
+div::-webkit-scrollbar {
+  width: 7px;               /* ширина scrollbar */
+}
+div::-webkit-scrollbar-track {
+  background: none;        /* цвет дорожки */
+  border: none;
+
+}
+div::-webkit-scrollbar-thumb {
+  background-color: transparent;    /* цвет плашки */
+  border: none;  /* padding вокруг плашки */
+}

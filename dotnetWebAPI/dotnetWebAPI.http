@@ -1,6 +1,0 @@
-@dotnetWebAPI_HostAddress = http://localhost:5022
-
-GET {{dotnetWebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
