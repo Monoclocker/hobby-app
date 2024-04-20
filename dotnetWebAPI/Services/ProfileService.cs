@@ -40,31 +40,6 @@ namespace dotnetWebAPI.Services
             return profile;
         }
 
-        public async Task AddProfile(ProfileDTO dto)
-        {
-            Profile newProfile = new Profile()
-            {
-                Name = dto.name!,
-                Surname = dto.surname!,
-                About = dto.about,
-                PhotoPath = dto.photo,
-                Age = dto.age
-            };
-
-            City? city = await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName);
-
-            if (city is null)
-            {
-                throw new Exception();
-            }
-
-            newProfile.City = city;
-
-            dbContext.Profiles.Add(newProfile);
-
-            await dbContext.SaveChangesAsync();
-        }
-
         public async Task UpdateProfile(ProfileDTO dto)
         {
 

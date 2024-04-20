@@ -1,7 +1,6 @@
 ﻿using dotnetWebAPI.DTO;
 using dotnetWebAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -33,24 +32,6 @@ namespace dotnetWebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
-
-        
-        [HttpPost("CreateProfile")]
-        public async Task<IActionResult> CreateProfile(ProfileDTO dto)
-        {
-            try
-            {
-                await profileService.AddProfile(dto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
     }
 }

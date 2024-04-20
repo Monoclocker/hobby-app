@@ -1,6 +1,6 @@
 ﻿namespace dotnetWebAPI.DTO
 {
-    public class UserRegisterDTO
+    public class UserRegisterDTO : ProfileDTO
     {
         public required string username {  get; set; }
         public required string email { get; set; }
