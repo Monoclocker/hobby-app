@@ -9,7 +9,6 @@ const AppRouter = () => {
     const routes = [
         {path: '/login', component: <Login/>, exact: true},
         {path: '/register', component: <Registration/>, exact: true},
-        {path: '/groups', component: <GroupList />, exact: true},
         {path: '/*', component: <RootMain/>, exact: true},
     ]
 

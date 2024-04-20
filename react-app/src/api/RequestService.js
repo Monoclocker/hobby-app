@@ -13,7 +13,7 @@ export default class RequestService {
 
     static async registration(userData) {
         return await axios.post(url + "/Auth/Register", {
-          ...userData, cityName: "string", age: 32, interests: ["235rtwfesd"]
+          ...userData
         });
     }
 
@@ -22,6 +22,11 @@ export default class RequestService {
         localStorage.setItem('accessToken', response.data['accessToken']);
         console.log(response.data['accessToken'])
         localStorage.setItem('refreshToken', response.data['refreshToken']);
+        config = {
+            headers: {
+                Authorization:  "Bearer " + localStorage.getItem("accessToken"),
+            }
+        }
     }
 
     static async authorization(userData) {
