@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const useFetching = (callback) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +10,7 @@ export const useFetching = (callback) => {
             await callback();
         }
         catch (e) {
-            setError(e.message);
+            setError(Boolean(e.message));
         }
         finally {
             setIsLoading(false)

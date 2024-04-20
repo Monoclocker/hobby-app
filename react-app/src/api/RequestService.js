@@ -1,48 +1,53 @@
 import axios from "axios";
-axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("accessToken");
+
+let config = {
+    headers: {
+        Authorization:  "Bearer " + localStorage.getItem("accessToken"),
+    }
+}
+const url = "http://194.87.102.174";
 
 export default class RequestService {
 
     static async registration(userData) {
-        return await axios.post("http://194.87.102.174/Auth/Register", {
+        return await axios.post(url + "/Auth/Register", {
           ...userData,
         });
     }
 
     static async authorization(userData) {
-        return await axios.post("http://194.87.102.174/Auth/Login", {
+        return await axios.post(url + "/Auth/Login", {
             ...userData,
         })
     }
 
-    static async getUserData(userData) {
-        return await axios.post("http://194.87.102.174/Auth/Login", {
-            ...userData,
-        })
+    static async getUserData() {
+
+        return await axios.get(url + "/Profiles/GetProfile", config)
     }
 
     static async getAllGroups() {
-        return await axios.get(`http://194.87.102.174/Group/GetAll`)
+        return await axios.get(url + `/Group/GetAll`)
     }
 
     static async addUserToGroup(id, username) {
-        return await axios.post(`http://194.87.102.174/Group/Add/${id}`, {...username})
+        return await axios.post(url + `/Group/Add/${id}`, {...username})
     }
 
     static async removeUserFromGroup(id) {
-        return await axios.post(`http://194.87.102.174/Group/Remove/${id}`)
+        return await axios.post(url + `/Group/Remove/${id}`)
     }
 
     static async getUsersFromGroup(id) {
-        return await axios.get(`http://194.87.102.174/Group/GetParticipants/${id}`)
+        return await axios.get(url + `/Group/GetParticipants/${id}`)
     }
 
     static async removeGroup(id) {
-        return await axios.get(`http://194.87.102.174/Group/Remove/${id}`)
+        return await axios.get(url + `/Group/Remove/${id}`)
     }
 
     static async createGroup(data) {
-        return await axios.post(`http://194.87.102.174/Group/Create`, {...data})
+        return await axios.post(url + `/Group/Create`, {...data})
     }
 
 }
