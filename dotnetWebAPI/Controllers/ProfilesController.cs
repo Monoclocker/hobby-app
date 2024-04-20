@@ -33,5 +33,25 @@ namespace dotnetWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        public record class Link(string type, string link);
+
+        [Authorize]
+        [HttpPost("AddLink")]
+        public async Task<IActionResult> AddSocialLink(Link dto)
+        {
+            string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
+
+            try
+            {
+                await profileService.AddSocialLink(dto.type, dto.link, username);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

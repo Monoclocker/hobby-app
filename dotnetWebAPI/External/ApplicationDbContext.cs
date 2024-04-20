@@ -15,6 +15,8 @@ namespace dotnetWebAPI.External
         public DbSet<Profile> Profiles { get; set; } = default!;
         public DbSet<City> Cities { get; set; } = default!;
 
+        public DbSet<SocialLink> SocialLinks { get; set; } = default!;
+
         public ApplicationDbContext(DbContextOptions options): base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +26,7 @@ namespace dotnetWebAPI.External
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasAlternateKey(e => e.Username);
 
                 entity.HasIndex(e => e.Username);
 
@@ -66,15 +69,10 @@ namespace dotnetWebAPI.External
 
             modelBuilder.Entity<Profile>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e=>e.Surname).IsRequired();
+                entity.HasKey(e => e.Username);
                 entity.Property(e=>e.Age).IsRequired();
                 entity.Property(e => e.PhotoPath).HasDefaultValue("default.png");
 
-                entity
-                .HasOne(e => e.UserNavigation)
-                .WithOne(e => e.Profile);
 
                 entity
                 .HasMany(e => e.Interests)
@@ -96,9 +94,7 @@ namespace dotnetWebAPI.External
             modelBuilder.Entity<Interest>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
                 entity.Property(e => e.Name).IsRequired();
-
             });
 
 

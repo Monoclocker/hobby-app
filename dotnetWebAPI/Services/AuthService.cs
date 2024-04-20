@@ -30,8 +30,6 @@ namespace dotnetWebAPI.Services
 
             Profile newProfile = new Profile()
             {
-                Name = dto.name!,
-                Surname = dto.surname!,
                 About = dto.about,
                 Age = dto.age,
                 City = (await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName))!

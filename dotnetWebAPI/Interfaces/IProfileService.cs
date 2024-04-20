@@ -6,6 +6,7 @@ namespace dotnetWebAPI.Interfaces
     {
         Task<ProfileDTO> GetProfile(string username);
         Task UpdateProfile(ProfileDTO dto);
+        Task AddSocialLink(string type, string link, string username);
 
     }
 }

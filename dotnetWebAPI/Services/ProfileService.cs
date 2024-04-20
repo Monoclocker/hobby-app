@@ -18,9 +18,10 @@ namespace dotnetWebAPI.Services
         public async Task<ProfileDTO> GetProfile(string username)
         {
             Profile? findedProfile = await dbContext.Profiles
-                .Include(x=>x.UserNavigation)
-                .Include(x=>x.City)
-                .FirstOrDefaultAsync(x=>x.UserNavigation.Username == username);
+                .Include(x => x.UserNavigation)
+                .Include(x => x.City)
+                .Include(x => x.SocialLinks)
+                .FirstOrDefaultAsync(x => x.UserNavigation.Username == username);
 
             if (findedProfile == null)
             {
@@ -29,13 +30,22 @@ namespace dotnetWebAPI.Services
 
             ProfileDTO profile = new ProfileDTO()
             {
-                name = findedProfile.Name,
-                surname = findedProfile.Surname,
                 about = findedProfile.About,
                 photo = findedProfile.PhotoPath,
                 age = findedProfile.Age,
                 cityName = findedProfile.City.Name
             };
+
+            string links = "";
+
+            foreach (var Links in findedProfile.SocialLinks)
+            {
+                links += "type:" + Links.Type + "link:" + Links.Link + ";";
+            }
+
+            links.TrimEnd(';');
+
+            profile.links = links;
 
             return profile;
         }
@@ -45,7 +55,20 @@ namespace dotnetWebAPI.Services
 
         }
 
+        public async Task AddSocialLink(string type, string link, string username)
+        {
+            Profile? findedProfile = await dbContext.Profiles
+                .FirstOrDefaultAsync(x => x.UserNavigation.Username == username);
 
+            if (findedProfile == null)
+            {
+                throw new UnknownUserException();
+            }
+
+            findedProfile.SocialLinks.Add(new SocialLink() { Link = link, Type = type });
+
+            await dbContext.SaveChangesAsync();
+        }
 
     }
 }
