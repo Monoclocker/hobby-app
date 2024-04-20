@@ -4,7 +4,7 @@ namespace dotnetWebAPI.Interfaces
 {
     public interface IAuthService
     {
-        Task RegisterUser(UserRegisterDTO dto, IFormFile? formFile = null);
+        Task RegisterUser(UserRegisterDTO dto);
         Task<TokensDTO> LoginUser(UserLoginDTO dto);
     }
 }

@@ -40,7 +40,7 @@ namespace dotnetWebAPI.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterUser(UserRegisterDTO dto)
+        public async Task<IActionResult> RegisterUser(UserRegisterDTO dto, [FromForm] IFormFile? photo = null)
         {
             if (!ModelState.IsValid)
             {
@@ -49,6 +49,14 @@ namespace dotnetWebAPI.Controllers
 
             try
             {
+                if (photo != null)
+                {
+                    using (FileStream fs = new FileStream(photo.FileName, FileMode.CreateNew))
+                    {
+                        await photo.CopyToAsync(fs);
+                    }
+                    dto.photo = photo.FileName;
+                }
                 await authService.RegisterUser(dto);
                 return Ok();
             }

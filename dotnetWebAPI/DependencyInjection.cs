@@ -1,5 +1,6 @@
 ﻿using dotnetWebAPI.External;
 using dotnetWebAPI.Interfaces;
+using dotnetWebAPI.Models;
 using dotnetWebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,24 @@ namespace dotnetWebAPI
 
             return services;
 
+        }
+
+        public static void AddStartConfiguration(IDbContext context)
+        {
+            string[] arrayOfInterest = ["Активный отдых", "Вечеринки", "Алкоголь", "Спорт", "Кофе", "Настольные игры", "Квесты", "Кино", "Книги"];
+            string[] arrayOfCities = ["Ростов-на-Дону", "Москва"];
+
+            foreach (var interest in arrayOfInterest)
+            {
+                if (context.Interests.Where(x => x.Name == interest).Any())
+                    context.Interests.Add(new Interest() { Name = interest });
+            }
+
+            foreach (var city in arrayOfCities)
+            {
+                if (context.Cities.Where(x => x.Name == city).Any())
+                    context.Cities.Add(new City() { Name = city });
+            }
         }
     }
 }

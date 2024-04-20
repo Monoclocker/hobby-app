@@ -53,5 +53,23 @@ namespace dotnetWebAPI.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost("UpdateProfile")]
+        public async Task<IActionResult> UpdateProfile(ProfileDTO dto)
+        {
+            string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
+
+            try
+            {
+                dto.username = username;
+                await profileService.UpdateProfile(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

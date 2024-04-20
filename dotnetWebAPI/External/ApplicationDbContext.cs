@@ -61,10 +61,6 @@ namespace dotnetWebAPI.External
                 .HasMany(e=>e.GroupUsers)
                 .WithMany(e=>e.Groups);
 
-                entity
-                .HasMany(e => e.Interests)
-                .WithMany(e=>e.Groups);
-
             });
 
             modelBuilder.Entity<Profile>(entity =>
