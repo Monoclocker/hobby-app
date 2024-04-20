@@ -80,7 +80,7 @@ namespace dotnetWebAPI.Services
 
             if (dto.photo != null)
             {
-                profile.Photo = dto.photo;
+                profile.Photo = dto.photo.ToList();
             }
 
             await dbContext.SaveChangesAsync();

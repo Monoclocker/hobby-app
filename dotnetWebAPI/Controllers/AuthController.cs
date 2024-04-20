@@ -47,16 +47,20 @@ namespace dotnetWebAPI.Controllers
                 return BadRequest();
             }
 
-           
-
             try
             {
                 if (photo != null)
                 {
                     byte[] bytes = new byte[photo.Length];
-                    dto.photo = bytes;
+                    dto.photo = bytes.ToList();
+                }
+
+                else 
+                {
+                    dto.photo = null;
                 }
                 await authService.RegisterUser(dto);
+
                 return Ok();
             }
 

@@ -10,6 +10,6 @@ namespace dotnetWebAPI.DTO
         public string cityName { get; set; } = default!;
         public string? links { get; set; }
         public List<string> interests { get; set; } = new();
-        public byte[]? photo { get; set; }
+        public List<byte>? photo { get; set; }
     }
 }
