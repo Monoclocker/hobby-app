@@ -69,19 +69,29 @@ namespace dotnetWebAPI.Services
                 profile.About = dto.about;
             }
 
-            if (dto.cityName!= null)
+            if (dto.cityName != null)
             {
                 profile.City = await dbContext.Cities.FirstAsync(x => x.Name == dto.cityName);
             }
 
-            if (dto.age >= 0)
+            List<Interest> newInterests = new List<Interest>();
+
+            foreach (var name in dto.interests)
+            {
+                var interest = await dbContext.Interests.FirstOrDefaultAsync(x=>x.Name==name);
+                newInterests.Add(interest!);
+            }
+
+            profile.Interests = newInterests;
+
+            if (dto.age > 0)
             {
                 profile.Age = dto.age;
             }
 
             if (dto.photo != null)
             {
-                profile.Photo = dto.photo.ToList();
+                profile.Photo = dto.photo;
             }
 
             await dbContext.SaveChangesAsync();

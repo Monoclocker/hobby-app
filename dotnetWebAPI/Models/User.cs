@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Username { get; set; } = default!;
         public required int Age { get; set; }
-        public List<byte>? Photo { get; set; }
+        public string? Photo { get; set; }
         public string? About { get; set; }
         public int CityID { get; set; }
         public City City { get; set; } = default!;

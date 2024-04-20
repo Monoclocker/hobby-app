@@ -10,7 +10,7 @@
         public string cityName { get; set; } = default!;
         public string? links { get; set; }
         public List<string> interests { get; set; } = new();
-        public List<byte>? photo {  get; set; }
+        public string? photo {  get; set; }
 
     }
 }

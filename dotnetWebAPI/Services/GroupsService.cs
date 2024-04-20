@@ -18,6 +18,8 @@ namespace dotnetWebAPI.Services
         //переписать асинхронно
         public async Task<List<GroupCreationDTO>> GetAllGroups(string userName)
         {
+            
+
             IQueryable<Group> query = dbContext.Groups
                 .AsNoTracking()
                 .Where(x=>x.GroupUsers.Any(x=>x.Username == userName));
@@ -59,7 +61,7 @@ namespace dotnetWebAPI.Services
 
             if (findedGroup == null)
             {
-                throw new Exception();
+                throw new UnknownGroupException();
             }
 
             User? findedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == userName);
@@ -81,7 +83,7 @@ namespace dotnetWebAPI.Services
 
             if (findedGroup == null)
             {
-                throw new Exception();
+                throw new UnknownGroupException();
             }
 
             User? findedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == userName);
@@ -103,7 +105,7 @@ namespace dotnetWebAPI.Services
 
             if (findedGroup == null)
             {
-                throw new Exception();
+                throw new UnknownGroupException();
             }
 
             dbContext.Groups.Remove(findedGroup);
@@ -117,7 +119,7 @@ namespace dotnetWebAPI.Services
 
             if (group == null)
             {
-                throw new Exception();
+                throw new UnknownGroupException();
             }
 
             var participants = new List<string>();

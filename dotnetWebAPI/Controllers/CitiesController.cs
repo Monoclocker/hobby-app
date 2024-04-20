@@ -26,7 +26,7 @@ namespace dotnetWebAPI.Controllers
         [HttpGet("GetCities")]
         public async Task<List<string>> GetCities()
         {
-            return await GetCities();
+            return await citiesService.GetCities();
         }
 
     }

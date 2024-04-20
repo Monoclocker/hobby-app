@@ -28,7 +28,8 @@ namespace dotnetWebAPI.Services
                 Password = dto.password,
                 About = dto.about,
                 Age = dto.age,
-                CityID = (await dbContext.Cities.FirstOrDefaultAsync(x=>x.Name == dto.cityName))!.Id
+                CityID = (await dbContext.Cities.FirstOrDefaultAsync(x => x.Name == dto.cityName))!.Id,
+                Photo = dto.photo
             };
 
             await dbContext.Users.AddAsync(newUser);
