@@ -67,6 +67,7 @@ namespace dotnetWebAPI
                 if (context.Cities.Where(x => x.Name == city).Any())
                     context.Cities.Add(new City() { Name = city });
             }
+            context.SaveChanges();
         }
     }
 }
