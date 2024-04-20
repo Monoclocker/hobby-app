@@ -17,6 +17,7 @@
         public List<Group> Groups { get; set; } = new List<Group>();
         public List<Interest> Interests { get; set; } = new List<Interest>();
         public List<SocialLink> SocialLinks { get; set; } = new List<SocialLink>();
+        public List<GroupsUsers> GroupsUsers { get; set; } = new List<GroupsUsers>();
 
     }
 }

@@ -2,6 +2,7 @@
 using dotnetWebAPI.Exceptions;
 using dotnetWebAPI.Interfaces;
 using dotnetWebAPI.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnetWebAPI.Services
@@ -19,9 +20,9 @@ namespace dotnetWebAPI.Services
         public async Task<List<GroupCreationDTO>> GetAllGroups(string userName)
         {
             
-
             IQueryable<Group> query = dbContext.Groups
                 .AsNoTracking()
+                .Include(x=>x.GroupsUsers)
                 .Where(x=>x.GroupUsers.Any(x=>x.Username == userName));
 
             List<GroupCreationDTO> collection = new List<GroupCreationDTO>();
@@ -30,7 +31,7 @@ namespace dotnetWebAPI.Services
 
             foreach(var element in groups)
             {
-                collection.Add(new GroupCreationDTO() { groupName = element.Name, id = element.Id });
+                collection.Add(new GroupCreationDTO() { groupName = element.Name, id = element.Id, isAdmin = element.GroupsUsers.Single(x=>x.User.Username == userName).IsAdmin});
             }
 
             return collection;
@@ -47,6 +48,8 @@ namespace dotnetWebAPI.Services
             {
                 throw new UnknownUserException();
             }
+
+            creator.GroupsUsers.Add(new GroupsUsers() { Group = newGroup, IsAdmin = true, User = creator });
 
             newGroup.GroupUsers.Add(creator);
 
@@ -71,7 +74,8 @@ namespace dotnetWebAPI.Services
                 throw new UnknownUserException();
             }
 
-
+            findedUser.GroupsUsers.Add(new GroupsUsers() { Group = findedGroup, IsAdmin = false, User = findedUser });
+            
             findedGroup.GroupUsers.Add(findedUser);
 
             await dbContext.SaveChangesAsync();
@@ -131,6 +135,5 @@ namespace dotnetWebAPI.Services
 
             return participants;
         }
-
     }
 }

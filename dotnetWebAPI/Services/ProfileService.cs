@@ -55,6 +55,7 @@ namespace dotnetWebAPI.Services
         {
             User? profile = await dbContext.Users
                 .Include(x=>x.Interests)
+                .Include(x=>x.SocialLinks)
                 .FirstOrDefaultAsync(x => x.Username == dto.username);
 
             if (profile == null)
@@ -86,10 +87,7 @@ namespace dotnetWebAPI.Services
             if (dto.links != null)
             {
                 profile.SocialLinks.Clear();
-                foreach (var link in profile.SocialLinks)
-                {
-                    profile.SocialLinks.Remove(link);
-                }
+
                 foreach (var linkname in dto.links!)
                 {
                     profile.SocialLinks.Add(new SocialLink() { Link = linkname });

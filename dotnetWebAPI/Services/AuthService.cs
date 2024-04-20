@@ -36,10 +36,13 @@ namespace dotnetWebAPI.Services
 
             foreach (var interest in dto.interests)
             {
-                interests.Add(dbContext.Interests.First(x => x.Name == interest));
+                newUser.Interests.Add(dbContext.Interests.First(x => x.Name == interest));
             }
 
-            newUser.Interests.AddRange(interests);
+            foreach (var links in dto.links!)
+            {
+                newUser.SocialLinks.Add(new SocialLink() { Link = links });
+            }
 
             await dbContext.Users.AddAsync(newUser);
 

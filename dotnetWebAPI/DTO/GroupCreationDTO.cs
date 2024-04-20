@@ -4,5 +4,7 @@
     {
         public int? id {  get; set; }
         public required string groupName { get; set; }
+
+        public bool isAdmin { get; set; } = false;
     }
 }

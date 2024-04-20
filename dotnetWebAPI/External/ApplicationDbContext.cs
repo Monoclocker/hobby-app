@@ -67,9 +67,21 @@ namespace dotnetWebAPI.External
                 entity.HasKey(e => e.Id);
 
                 entity
-                .HasMany(e=>e.GroupUsers)
-                .WithMany(e=>e.Groups);
-
+                .HasMany(e => e.GroupUsers)
+                .WithMany(e => e.Groups)
+                .UsingEntity<GroupsUsers>(
+                opt =>
+                    opt.HasOne(p => p.User)
+                    .WithMany(p => p.GroupsUsers)
+                    .HasForeignKey(p=>p.UserId),
+                opt =>
+                    opt.HasOne(p=>p.Group)
+                    .WithMany(p=>p.GroupsUsers)
+                    .HasForeignKey(p=>p.GroupId),
+                opt =>
+                {
+                    opt.Property(p => p.IsAdmin).HasDefaultValue(false);
+                });
             });
 
             modelBuilder.Entity<City>(entity =>
