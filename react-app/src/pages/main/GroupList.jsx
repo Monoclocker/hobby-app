@@ -9,8 +9,14 @@ const GroupList = () => {
     const [listGroups, setListGroups] = useState([]);
 
     const [logIn, isLoading, eventError] = useFetching(async () => {
-        setListGroups(await RequestService.getAllGroups());
+        const response = await RequestService.getAllGroups();
+        console.log(response)
     });
+
+    useEffect(() => {
+        logIn();
+    }, []);
+
 
     return (
         <div className="max-w-prose mx-auto p-6 my-8 backdrop-opacity-50 rounded-lg shadow-md shadow-indigo-500/50 overflow-hidden">

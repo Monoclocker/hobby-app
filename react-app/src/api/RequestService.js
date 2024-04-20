@@ -7,12 +7,21 @@ let config = {
 }
 const url = "http://194.87.102.174";
 
+
+
 export default class RequestService {
 
     static async registration(userData) {
         return await axios.post(url + "/Auth/Register", {
-          ...userData,
+          ...userData, cityName: "string", age: 32, interests: ["235rtwfesd"]
         });
+    }
+
+    static async refreshToken() {
+        const response = await axios.post(url + "/Auth/Refresh", {refreshToken: localStorage.getItem('refreshToken')});
+        localStorage.setItem('accessToken', response.data['accessToken']);
+        console.log(response.data['accessToken'])
+        localStorage.setItem('refreshToken', response.data['refreshToken']);
     }
 
     static async authorization(userData) {
@@ -22,12 +31,11 @@ export default class RequestService {
     }
 
     static async getUserData() {
-
         return await axios.get(url + "/Profiles/GetProfile", config)
     }
 
     static async getAllGroups() {
-        return await axios.get(url + `/Group/GetAll`)
+        return await axios.get(url + `/Group/GetAll`, config)
     }
 
     static async addUserToGroup(id, username) {
@@ -47,7 +55,12 @@ export default class RequestService {
     }
 
     static async createGroup(data) {
-        return await axios.post(url + `/Group/Create`, {...data})
+        return await axios.post(url + `/Group/Create`, {...data}, config)
     }
+
+    static async updateProfile(data) {
+        return await axios.post(url + `/Profiles/UpdateProfile`, {...data}, config)
+    }
+
 
 }

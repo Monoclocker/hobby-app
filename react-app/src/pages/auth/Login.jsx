@@ -15,13 +15,13 @@ const Login = () => {
     const userData = { username: username, password: password };
 
     const [logIn, isLoading, eventError] = useFetching(async () => {
-        const response = await RequestService.authorization(userData);
-        console.log(response)
-        if (response.status === 200) {
-            navigate("/profile");
+        try {
+            const response = await RequestService.authorization(userData);
             localStorage.setItem('accessToken', response.data['accessToken']);
+            console.log(response.data['accessToken'])
             localStorage.setItem('refreshToken', response.data['refreshToken']);
-        } else {
+            navigate("/groups");
+        } catch(e) {
             setMessageAuth("Неправильно введён логин или пароль!");
             setTimeout(() => {
               setMessageAuth("");
