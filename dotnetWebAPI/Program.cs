@@ -1,4 +1,6 @@
 
+using dotnetWebAPI.External;
+
 namespace dotnetWebAPI
 {
     public class Program
@@ -22,6 +24,13 @@ namespace dotnetWebAPI
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                context.Database.EnsureCreated();
             }
 
             app.UseHttpsRedirection();
