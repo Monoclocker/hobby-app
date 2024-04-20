@@ -37,7 +37,7 @@ namespace dotnetWebAPI.Controllers
         }
 
         
-        [HttpGet("CreateProfile")]
+        [HttpPost("CreateProfile")]
         public async Task<IActionResult> CreateProfile(ProfileDTO dto)
         {
             try
