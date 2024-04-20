@@ -1,0 +1,26 @@
+name: "Backend"
+on:
+  push:
+    branches: dotnet
+jobs:
+  clear_container:
+    runs-on: self-hosted
+    steps:
+      - name: clean up
+        run: docker stop dotnetwebapi || true && docker rm dotnetwebapi || true
+  make_container:
+    needs: clear_container
+    runs-on: self-hosted
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.1.3
+        with:
+          ref: dotnet
+      - run: dotnet publish dotnetWebAPI --os linux --arch x64 /t:PublishContainer -c Release
+      - run: dotnet ef migrations add initial
+  run_container:
+    needs: make_container
+    runs-on: self-hosted
+    steps:
+      - name: start
+        run: docker run --ip 172.0.0.1 --name dotnetwebapi -e Database={{ secrets.DATABASE }} Key={{ secrets.KEY }} Issuer={{ secrets.ISSUER }} dotnetwebapi
