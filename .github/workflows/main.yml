@@ -7,7 +7,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: clean up
-        run: docker rm -f dotnetwebapi || true
+        run: docker network rm -f mynet
+      - run: docker network create --subnet=172.0.0.0/16 mynet
+      - run: docker rm -f dotnetwebapi || true
   make_container:
     needs: clear_container
     runs-on: self-hosted
