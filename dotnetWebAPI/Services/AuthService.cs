@@ -35,7 +35,8 @@ namespace dotnetWebAPI.Services
 
         public async Task<TokensDTO> LoginUser(UserLoginDTO dto)
         {
-            User? findedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == dto.username);
+            User? findedUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == dto.username
+            && x.Password == dto.password);
 
             if (findedUser is null)
             {

@@ -7,6 +7,8 @@ namespace dotnetWebAPI.Interfaces
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Group> Groups { get; set; }
+
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }

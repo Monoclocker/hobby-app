@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace dotnetWebAPI.Models
+﻿namespace dotnetWebAPI.Models
 {
     public class User
     {
@@ -11,5 +9,7 @@ namespace dotnetWebAPI.Models
         public bool IsEmailConfirmed { get; set; }
         public DateTime SecurityTimeStamp { get; set; }
         public bool IsBlocked { get; set; }
+        public List<Group> Groups { get; set; } = new List<Group>();
+
     }
 }

@@ -2,6 +2,7 @@
 using dotnetWebAPI.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace dotnetWebAPI.Services
@@ -17,12 +18,20 @@ namespace dotnetWebAPI.Services
         }
 
 
+
         public string GenerateToken(UserLoginDTO dto, int lifeDurationSeconds)
         {
+
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim(type: ClaimTypes.Name, dto.username)
+            };
+
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Issuer = configuration["Issuer"],
                 Expires = DateTime.UtcNow.AddMinutes(lifeDurationSeconds),
+                Claims = claims.ToDictionary(x=>x.Type, x=>(object)x.Value),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["key"]!)), SecurityAlgorithms.HmacSha256)
             };

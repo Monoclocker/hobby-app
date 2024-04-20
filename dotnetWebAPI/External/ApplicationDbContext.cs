@@ -8,6 +8,8 @@ namespace dotnetWebAPI.External
     {
         public DbSet<User> Users { get; set; } = default!;
 
+        public DbSet<Group> Groups { get; set; } = default!;
+
         public ApplicationDbContext(DbContextOptions options): base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +43,15 @@ namespace dotnetWebAPI.External
 
                 entity.Property(e => e.SecurityTimeStamp)
                 .HasDefaultValue(DateTime.UtcNow);
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity
+                .HasMany(e=>e.GroupUsers)
+                .WithMany(e=>e.Groups);
             });
 
         }
