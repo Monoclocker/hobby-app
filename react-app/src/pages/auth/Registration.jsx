@@ -25,8 +25,8 @@ const Registration = () => {
               navigate("/login", { replace: true });
             }, 1000);
         } else {
-
-            navigate("/register", { replace: true });
+            console.log(response)
+            // navigate("/register", { replace: true });
         }
     })
 
@@ -155,7 +155,7 @@ const Registration = () => {
         <p className="text-center mt-3">
           <a
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Авторизация
           </a>

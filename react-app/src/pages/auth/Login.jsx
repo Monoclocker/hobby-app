@@ -19,6 +19,8 @@ const Login = () => {
         console.log(response)
         if (response.status === 200) {
             navigate("/profile");
+            localStorage.setItem('accessToken', response.data['accessToken']);
+            localStorage.setItem('refreshToken', response.data['refreshToken']);
         } else {
             setMessageAuth("Неправильно введён логин или пароль!");
             setTimeout(() => {
@@ -104,7 +106,7 @@ const Login = () => {
           Зарегистрируешься?
           <a
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
-            onClick={() => navigate("register")}
+            onClick={() => navigate("/register")}
           >
             {" "}
             Регистрация
