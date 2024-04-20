@@ -1,6 +1,5 @@
 ﻿using dotnetWebAPI.DTO;
 using dotnetWebAPI.Interfaces;
-using dotnetWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetWebAPI.Controllers

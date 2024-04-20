@@ -29,6 +29,7 @@ namespace dotnetWebAPI.Services
 
             ProfileDTO profile = new ProfileDTO()
             {
+                username = findedProfile.Username,
                 about = findedProfile.About,
                 photo = findedProfile.Photo,
                 age = findedProfile.Age,
