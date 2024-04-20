@@ -40,6 +40,7 @@ namespace dotnetWebAPI
             services.AddScoped<IDbContext>(provider => provider.GetService<ApplicationDbContext>()!);
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IGroupsService, GroupsService>();
            
 
 
