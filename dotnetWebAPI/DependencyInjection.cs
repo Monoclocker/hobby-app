@@ -51,7 +51,7 @@ namespace dotnetWebAPI
 
         }
 
-        public static void AddStartConfiguration(IDbContext context)
+        public static void AddStartConfiguration(ApplicationDbContext context)
         {
             string[] arrayOfInterest = ["Активный отдых", "Вечеринки", "Алкоголь", "Спорт", "Кофе", "Настольные игры", "Квесты", "Кино", "Книги"];
             string[] arrayOfCities = ["Ростов-на-Дону", "Москва"];
