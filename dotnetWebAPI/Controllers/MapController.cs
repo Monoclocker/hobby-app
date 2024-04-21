@@ -58,5 +58,33 @@ namespace dotnetWebAPI.Controllers
             }
         }
 
+        [HttpPost("CreatePlace")]
+        public async Task<IActionResult> CreatePlace(PlaceDTO dto)
+        {
+            try
+            {
+                await placesService.CreatePlace(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllPlaces")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                List<PlaceDTO> places = await placesService.GetAllPlaces();
+                return Ok(places);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

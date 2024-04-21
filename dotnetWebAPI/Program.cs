@@ -33,7 +33,6 @@ namespace dotnetWebAPI
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 await DependencyInjection.AddStartConfiguration(context);
             }
