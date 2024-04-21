@@ -154,6 +154,11 @@ namespace dotnetWebAPI.Services
 
             int upperBound = user.Groups.Count;
 
+            if (upperBound == 0) 
+            {
+                return new List<GroupCoordinates>();
+            }
+
             Random rng = new Random(); //blessmerng
 
             int number = rng.Next(0, upperBound);
