@@ -135,9 +135,7 @@ namespace dotnetWebAPI.Services
                 throw new UnknownUserException();
             }
 
-            if (user.LastCoordinates != null && 
-                user.LastCoordinates.Latitude != null && 
-                user.LastCoordinates.Longitude != null)
+            if (user.LastCoordinates != null)
             {
                 coorinates.Add((float)user.LastCoordinates.Latitude);
                 coorinates.Add((float)user.LastCoordinates.Longitude);
@@ -155,20 +153,12 @@ namespace dotnetWebAPI.Services
                 throw new UnknownUserException();
             }
 
-            if(user.LastCoordinates == null)
-            {
-                user.LastCoordinates = new LastCoordinates();
-            }
-
-            user.LastCoordinates.Latitude = coordinates[0];
-            user.LastCoordinates.Longitude = coordinates[1];
+            user.LastCoordinates!.Latitude = coordinates[0];
+            user.LastCoordinates!.Longitude = coordinates[1];
 
             dbContext.Users.Update(user);
 
             await dbContext.SaveChangesAsync();
-
         }
-
-
     }
 }

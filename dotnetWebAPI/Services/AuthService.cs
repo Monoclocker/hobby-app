@@ -30,6 +30,7 @@ namespace dotnetWebAPI.Services
                 Age = dto.age,
                 CityID = (await dbContext.Cities.FirstOrDefaultAsync(x => x.Name == dto.cityName))!.Id,
                 Photo = dto.photo,
+                LastCoordinates = new LastCoordinates()
             };
 
             List<Interest> interests = new List<Interest>();
