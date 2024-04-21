@@ -42,7 +42,7 @@ const Profile = () => {
                 </MyModal>
               <div className="bg-gray-900 w-full h-48 sm:h-64 flex items-center justify-center">
                   <img
-                      src={profileData['photo'] ? profileData['photo'] : "public/default.png"}
+                      src={"public/default.png"}
                       alt="public/default.png"
                       className="w-1/2 h-1/2 sm:w-48 sm:h-48 rounded-full"
                   />

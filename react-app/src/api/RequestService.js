@@ -5,7 +5,7 @@ let config = {
         Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
     },
 };
-const url = 'http://194.87.102.174:8080';
+const url = 'http://194.87.102.174';
 
 export default class RequestService {
     static async registration(userData) {

@@ -14,7 +14,8 @@ const MapComponent = () => {
     const [currentPosition, setCurrentPosition] = useState([47.2364, 39.7139]);
     const [destination, setDestination] = useState([47.2364, 39.7139]); // Отдельная метка-цель
     const [markers, setMarkers] = useState([]);
-    const destinationMarkerColor = "#8c1414"
+    const [destinationPlacesList, setDestinationPlacesList] = useState([]);
+
 
     const [fetchData, isDataLoading, dataError] = useFetching(async () => {
         try {
@@ -30,13 +31,14 @@ const MapComponent = () => {
                 resultMarkers.push({lat: el['coordinates'][0], lng: el['coordinates'][1]});
             })
             let valuableDestinations = [];
+            // in progress...
             response.data['places'].map((place) => {
                 // valuableDestinations.push({lat: place.coordinates[1], lng: place.coordinates[0]});
                 valuableDestinations = place.coordinates
+                setDestinationPlacesList( [{name: place['name'], interests: place['interests']}])
             })
             valuableDestinations.reverse();
-            console.log(resultMarkers)
-            console.log(valuableDestinations, 43434)
+            console.log(destinationPlacesList, 123)
 
             setDestination(valuableDestinations)
             setMarkers(resultMarkers);
@@ -116,7 +118,6 @@ const MapComponent = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {markers.map((marker, idx) =>
-
                     <Marker key={idx} position={marker} eventHandlers={{
                         click: () => handleMarkerClick(idx),
                     }}>
@@ -130,6 +131,14 @@ const MapComponent = () => {
                 <AddMarker />
                 <RoutingMachine />
             </MapContainer>
+            <div className="max-w-prose mx-auto p-6 my-8 backdrop-opacity-50 rounded-lg shadow-md shadow-indigo-500/50 overflow-hidden">
+                    {destinationPlacesList.map(place =>
+                        <div className="p-6">
+                            <p className=" text-indigo-900 font-bold text-center p-4">Рекомендуем посетить "{place.name}"</p>
+                            <p className=" text-indigo-900 font-bold text-center p-4">Место выбрано на основе совпавших интересов ({place.interests})</p>
+                        </div>
+                            )}
+            </div>
         </div>
     );
 };

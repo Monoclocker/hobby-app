@@ -4,11 +4,13 @@ import RootMain from '../pages/main/RootMain.jsx';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GroupList from '../pages/main/GroupList.jsx';
 import Navbar from './Navbar.jsx';
+import React from "react";
 
 const AppRouter = () => {
     const routes = [
         { path: '/login', component: <Login />, exact: true },
         { path: '/register', component: <Registration />, exact: true },
+        {path: '/', component: <Login />, exact: true },
         { path: '/*', component: <RootMain />, exact: true },
     ];
 

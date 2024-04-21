@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Profile from './Profile';
 import GroupList from './GroupList';
 import MapComponent from "../../components/CreateMap.jsx";
+import Login from "../auth/Login.jsx";
 
 const RootMain = () => {
     return (
