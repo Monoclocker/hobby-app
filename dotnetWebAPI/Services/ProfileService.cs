@@ -123,5 +123,42 @@ namespace dotnetWebAPI.Services
 
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<float>> GetLastCoordinates(string username)
+        {
+            List<float> coorinates = new List<float>();
+
+            User? user = await dbContext.Users.Include(x=>x.LastCoordinates).FirstOrDefaultAsync(x => x.Username == username);
+
+            if(user == null)
+            {
+                throw new UnknownUserException();
+            }
+
+            if (user.LastCoordinates != null && 
+                user.LastCoordinates.Latitude != null && 
+                user.LastCoordinates.Longitude != null)
+            {
+                coorinates.Add((float)user.LastCoordinates.Latitude);
+                coorinates.Add((float)user.LastCoordinates.Longitude);
+            }
+
+            return coorinates;
+        }
+
+        public async Task SaveLastCoordinates(string username, List<float> coordinates)
+        {
+            User? user = await dbContext.Users.Include(x => x.LastCoordinates).FirstOrDefaultAsync(x => x.Username == username);
+
+            if (user == null)
+            {
+                throw new UnknownUserException();
+            }
+
+            user.LastCoordinates!.Latitude = coordinates[0];
+            user.LastCoordinates!.Longitude = coordinates[1];
+        }
+
+
     }
 }

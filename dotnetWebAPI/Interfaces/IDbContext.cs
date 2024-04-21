@@ -15,6 +15,8 @@ namespace dotnetWebAPI.Interfaces
 
         public DbSet<SocialLink> SocialLinks { get; set; }
 
+        public DbSet<Place> Places { get; set; }
+
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

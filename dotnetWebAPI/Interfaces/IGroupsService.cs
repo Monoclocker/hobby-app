@@ -16,5 +16,7 @@ namespace dotnetWebAPI.Interfaces
 
         Task<List<string>> GetGroupParticipants(int groupId);
 
+        Task<List<GroupCoordinates>> GetGroupCoordinatesByUsername(string username);
+
     }
 }

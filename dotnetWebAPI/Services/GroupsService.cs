@@ -87,7 +87,7 @@ namespace dotnetWebAPI.Services
 
         public async Task RemoveFromGroupById(string userName, int groupId)
         {
-            Group? findedGroup = await dbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+            Group? findedGroup = await dbContext.Groups.Include(x=>x.GroupUsers).FirstOrDefaultAsync(x => x.Id == groupId);
 
             if (findedGroup == null)
             {
@@ -138,6 +138,55 @@ namespace dotnetWebAPI.Services
             }
 
             return participants;
+        }
+
+        public async Task<List<GroupCoordinates>> GetGroupCoordinatesByUsername(string username)
+        {
+            var user = await dbContext.Users
+                .Include(x => x.Groups)
+                .Include(x => x.GroupsUsers)
+                .FirstOrDefaultAsync(x=>x.Username == username);
+
+            if(user == null)
+            {
+                throw new UnknownUserException();
+            }
+
+            int upperBound = user.Groups.Count;
+
+            Random rng = new Random(); //blessmerng
+
+            int number = rng.Next(0, upperBound);
+
+            int randomedGroupId = user.Groups[number].Id;
+
+            Group group = await dbContext.Groups
+                .Include(x=>x.GroupUsers)
+                .ThenInclude(x=>x.LastCoordinates)
+                .FirstAsync(x=>x.Id==randomedGroupId);
+
+            List<GroupCoordinates> result = new List<GroupCoordinates>();
+
+
+            foreach(var userIter in group.GroupUsers) 
+            {
+                if(user.Id == userIter.Id)
+                {
+                    continue;
+                }
+
+                GroupCoordinates coordinates = new GroupCoordinates()
+                {
+                    username = userIter.Username,
+                    coordinates = [(float)userIter.LastCoordinates!.Latitude!, (float)userIter.LastCoordinates!.Longitude!]
+                };
+
+                result.Add(coordinates);
+
+            }
+
+            return result;
+
         }
     }
 }

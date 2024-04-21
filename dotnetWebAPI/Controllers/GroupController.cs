@@ -71,20 +71,20 @@ namespace dotnetWebAPI.Controllers
             }
 
         }
+        
 
         [HttpPost("Remove/{id}")]
-        public async Task<IActionResult> RemoveFromGroup(int id)
+        public async Task<IActionResult> RemoveFromGroup(UsernameDTO dto, int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
 
             try
             {
-                await groupsService.RemoveFromGroupById(username, id);
+                await groupsService.RemoveFromGroupById(dto.username, id);
                 return Ok();
             }
             catch

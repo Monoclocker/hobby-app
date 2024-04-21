@@ -16,6 +16,8 @@ namespace dotnetWebAPI.External
 
         public DbSet<SocialLink> SocialLinks { get; set; } = default!;
 
+        public DbSet<Place> Places { get; set; } = default!;
+
         public ApplicationDbContext(DbContextOptions options): base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,15 +44,6 @@ namespace dotnetWebAPI.External
 
                 entity.Property(e => e.Email)
                 .IsRequired();
-
-                entity.Property(e => e.IsBlocked)
-                .HasDefaultValue(false);
-
-                entity.Property(e => e.IsEmailConfirmed)
-                .HasDefaultValue(false);
-
-                entity.Property(e => e.SecurityTimeStamp)
-                .HasDefaultValue(DateTime.UtcNow);
 
                 entity
                 .HasOne(e => e.City)
@@ -95,6 +88,17 @@ namespace dotnetWebAPI.External
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Place>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e=>e.Name).IsRequired();
+
+                entity.HasMany(e => e.Interests)
+                .WithMany(e => e.Places);
+
+
             });
         }
     }
