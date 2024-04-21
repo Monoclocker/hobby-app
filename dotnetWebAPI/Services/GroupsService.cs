@@ -24,7 +24,7 @@ namespace dotnetWebAPI.Services
 
             if (user == null)
             {
-                throw new UserUnknownException();
+                throw new UnknownUserException();
             }
 
             List<GroupsUsers> query = user.GroupsUsers.ToList();
@@ -59,8 +59,6 @@ namespace dotnetWebAPI.Services
 
             creator.GroupsUsers.Add(new GroupsUsers() { Group = newGroup, IsAdmin = true, User = creator });
 
-            newGroup.GroupUsers.Add(creator);
-
             dbContext.Groups.Add(newGroup);
 
             await dbContext.SaveChangesAsync();
@@ -83,8 +81,6 @@ namespace dotnetWebAPI.Services
             }
 
             findedUser.GroupsUsers.Add(new GroupsUsers() { Group = findedGroup, IsAdmin = false, User = findedUser });
-            
-            findedGroup.GroupUsers.Add(findedUser);
 
             await dbContext.SaveChangesAsync();
         }
@@ -127,7 +123,7 @@ namespace dotnetWebAPI.Services
 
         public async Task<List<string>> GetGroupParticipants(int groupId)
         {
-            Group? group = await dbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+            Group? group = await dbContext.Groups.Include(x=>x.GroupUsers).FirstOrDefaultAsync(x => x.Id == groupId);
 
             if (group == null)
             {
@@ -136,7 +132,7 @@ namespace dotnetWebAPI.Services
 
             var participants = new List<string>();
 
-            foreach (var  participant in group.GroupUsers) 
+            foreach (var participant in group.GroupUsers) 
             {
                 participants.Add(participant.Username);
             }
