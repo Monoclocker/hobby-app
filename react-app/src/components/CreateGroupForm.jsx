@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../api/RequestService';
+import { useNavigate } from 'react-router-dom';
 
 const CreateGroupForm = ({ modalOpen, setModalOpen }) => {
     const [groupName, setGroupName] = useState('');
-
+    const navigate = useNavigate();
     const handleClickOutside = (e) => {
         if (e.target.classList.contains('bg-gray-800')) {
             setModalOpen(!modalOpen);
@@ -19,7 +20,15 @@ const CreateGroupForm = ({ modalOpen, setModalOpen }) => {
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();
-        await RequestService.createGroup({ groupName: groupName });
+        try {
+            await RequestService.createGroup({ groupName: groupName });
+        } catch (e) {
+            if (e.response.status === 401) {
+                await RequestService.refreshToken();
+                navigate('/groups');
+            }
+        }
+        window.location.reload();
         setModalOpen(!modalOpen);
     };
     return (

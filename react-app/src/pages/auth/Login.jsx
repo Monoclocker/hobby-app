@@ -15,13 +15,15 @@ const Login = () => {
     const userData = { username: username, password: password };
 
     const [logIn, isLoading, eventError] = useFetching(async () => {
-        const response = await RequestService.authorization(userData);
-        console.log(response)
-        if (response.status === 200) {
-            navigate("/profile");
+        try {
+            const response = await RequestService.authorization(userData);
             localStorage.setItem('accessToken', response.data['accessToken']);
+            console.log(response.data['accessToken'])
             localStorage.setItem('refreshToken', response.data['refreshToken']);
-        } else {
+            navigate("/groups");
+            window.location.reload();
+        } catch(e) {
+            console.log(e)
             setMessageAuth("Неправильно введён логин или пароль!");
             setTimeout(() => {
               setMessageAuth("");
@@ -36,12 +38,10 @@ const Login = () => {
 
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Войдите в свой аккаунт
-        </h2>
-      </div>
+    <div className="bg-gradient-to-r from-pink-200 via-purple-300 to-indigo-400 bg-cover bg-center h-screen flex flex-col justify-center">
+        <img style={{display: "block", margin: "auto"}} src="public/main_logo.svg" alt="logo"/>
+    <div style={{marginBottom: "12%"}} className="flex flex-col justify-center px-6 py-12 lg:px-8">
+
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" method="POST" onSubmit={login}>
@@ -113,6 +113,7 @@ const Login = () => {
           </a>
         </p>
       </div>
+    </div>
     </div>
   );
 };

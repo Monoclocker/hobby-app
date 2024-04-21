@@ -3,14 +3,34 @@ import { useState, useEffect } from 'react';
 import RequestService from '../../api/RequestService';
 import { useFetching } from '../../hooks/useFetching.js';
 import CreateGroupForm from '../../components/CreateGroupForm.jsx';
+import Group from '../../components/Group.jsx';
 
 const GroupList = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [listGroups, setListGroups] = useState([]);
 
     const [logIn, isLoading, eventError] = useFetching(async () => {
-        setListGroups(await RequestService.getAllGroups());
+        const response = await RequestService.getAllGroups();
+        const uniqueGroups = {};
+
+        response.data.forEach((group) => {
+            if (uniqueGroups[group.id]) {
+                if (group.isAdmin) {
+                    uniqueGroups[group.id] = group;
+                }
+            } else {
+                uniqueGroups[group.id] = group;
+            }
+        });
+
+        const uniqueGroupsArray = Object.values(uniqueGroups);
+
+        setListGroups([...uniqueGroupsArray]);
     });
+
+    useEffect(() => {
+        logIn();
+    }, []);
 
     return (
         <div className="max-w-prose mx-auto p-6 my-8 backdrop-opacity-50 rounded-lg shadow-md shadow-indigo-500/50 overflow-hidden">
@@ -21,17 +41,7 @@ const GroupList = () => {
                 ) : (
                     <div className="mb-4">
                         {listGroups.map((group) => (
-                            <div
-                                key={group.id}
-                                className="bg-gray-100 rounded-lg p-4 mb-2 flex items-center justify-between"
-                            >
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-800">{group.name}</h3>
-                                </div>
-                                <button className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md">
-                                    Присоединиться
-                                </button>
-                            </div>
+                            <Group key={group.id} id={group.id} name={group.groupName} isAdmin={group.isAdmin} />
                         ))}
                     </div>
                 )}
