@@ -29,53 +29,47 @@ namespace dotnetWebAPI.Controllers
         public record class Coordinates(List<float> coords);
 
         [Authorize]
-        [HttpGet("GetInfo")]
-        public async Task<IActionResult> GetMapInfo(Coordinates _dto)
+        [HttpPost("SaveCoordinates")]
+        public async Task<IActionResult> SaveCoordinates(Coordinates _dto)
         {
             string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
 
             await profileService.SaveLastCoordinates(username, _dto.coords);
 
-            MapInfoDTO dto = new MapInfoDTO();
-            dto.username = username;
+            return Ok();
+        }
 
-            List<float> coordinates = await profileService.GetLastCoordinates(username);
 
-            dto.coordinates = coordinates;
+        [Authorize]
+        [HttpPost("GetInfo")]
+        public async Task<IActionResult> GetMapInfo()
+        {
+            string username = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)!.Value;
+            try
+            {
+                MapInfoDTO dto = new MapInfoDTO();
 
-            List<GroupCoordinates> friends = await groupsService.GetGroupCoordinatesByUsername(username);
+                dto.username = username;
 
-            dto.friends = friends;
+                List<float> coordinates = await profileService.GetLastCoordinates(username);
 
-            List<PlaceDTO> places = await placesService.GetPlaces(username);
+                dto.coordinates = coordinates;
 
-            dto.places = places;
+                List<GroupCoordinates> friends = await groupsService.GetGroupCoordinatesByUsername(username);
 
-            return Ok(dto);
+                dto.friends = friends;
 
-            //try
-            //{
-            //    dto.username = username;
+                List<PlaceDTO> places = await placesService.GetPlaces(username);
 
-            //    List<float> coordinates = await profileService.GetLastCoordinates(username);
+                dto.places = places;
 
-            //    dto.coordinates = coordinates;
+                return Ok(dto);
 
-            //    List<GroupCoordinates> friends = await groupsService.GetGroupCoordinatesByUsername(username);
-
-            //    dto.friends = friends;
-
-            //    List<PlaceDTO> places = await placesService.GetPlaces(username);
-
-            //    dto.places = places;
-
-            //    return Ok(dto);
-
-            //}
-            //catch(Exception ex) 
-            //{
-            //    return BadRequest(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("CreatePlace")]

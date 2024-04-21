@@ -170,6 +170,7 @@ namespace dotnetWebAPI.Services
 
             foreach(var userIter in group.GroupUsers) 
             {
+
                 if(user.Id == userIter.Id)
                 {
                     continue;

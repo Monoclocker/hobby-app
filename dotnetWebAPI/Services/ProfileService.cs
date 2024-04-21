@@ -155,8 +155,16 @@ namespace dotnetWebAPI.Services
                 throw new UnknownUserException();
             }
 
-            user.LastCoordinates!.Latitude = coordinates[0];
-            user.LastCoordinates!.Longitude = coordinates[1];
+            if(user.LastCoordinates == null)
+            {
+                user.LastCoordinates = new LastCoordinates();
+            }
+
+            user.LastCoordinates.Latitude = coordinates[0];
+            user.LastCoordinates.Longitude = coordinates[1];
+
+            await dbContext.SaveChangesAsync();
+
         }
 
 
