@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { isMobile, isAndroid, isIOS } from 'react-device-detect';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
     // Когда здесь использовал useNavigate компонент перерисовывался!!!
@@ -9,6 +9,7 @@ const Navbar = () => {
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
     const [activeLink, setActiveLink] = useState(1);
     const menuRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedStateActiveLink = JSON.parse(sessionStorage.getItem('activeLink'));
@@ -99,8 +100,8 @@ const Navbar = () => {
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex flex-shrink-0 items-center">
                             <img
-                                className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                className="h-12 w-18"
+                                src={"public/logo.svg"}
                                 alt="Your Company"
                             />
                         </div>
@@ -122,7 +123,7 @@ const Navbar = () => {
                                     Группы
                                 </Link>
                                 <Link
-                                    to="/messenger"
+                                    to="/map"
                                     className={
                                         activeLink === 2
                                             ? classNameNavbar.activeLinkDesktop
@@ -205,11 +206,13 @@ const Navbar = () => {
                                     </Link>
 
                                     <Link
-                                        to="#"
+                                        to="/login"
                                         onClick={() => {
-                                            setOpenMenu(!openMenu);
-                                            setActiveLink(0);
-                                            sessionStorage.setItem('activeLink', 0);
+
+                                        localStorage.setItem('accessToken', '');
+                                        localStorage.setItem('refreshToken', '');
+                                        navigate("/login");
+
                                         }}
                                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         role="menuitem"

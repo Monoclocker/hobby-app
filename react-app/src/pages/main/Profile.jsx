@@ -13,7 +13,8 @@ const Profile = () => {
         try {
             const response = await RequestService.getUserData();
                 if (response.status === 200) {
-                    console.log(response.data, 100000000000000000000)
+                    console.log(localStorage.getItem('accessToken'), 'aye');
+                    console.log(response.data, 100000000000000000000);
                     setProfileData(response.data);
                     localStorage.setItem('img', profileData['photo'])
                 }
@@ -75,8 +76,8 @@ const Profile = () => {
                       </h2>
                       <ul className="text-base sm:text-lg text-gray-700">
                           <li>
-                              {profileData['links'] ? profileData['links'].split(' ').map((link) => (
-                                  <a href={link}>{123}</a>
+                              {profileData['links'] ? profileData['links'].map((link) => (
+                                  <a href={link}>{link + ' '}</a>
                               )) : "**Может быть тут что-то будет 🙃**"}
                           </li>
                       </ul>

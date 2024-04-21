@@ -21,7 +21,9 @@ const Login = () => {
             console.log(response.data['accessToken'])
             localStorage.setItem('refreshToken', response.data['refreshToken']);
             navigate("/groups");
+            window.location.reload();
         } catch(e) {
+            console.log(e)
             setMessageAuth("Неправильно введён логин или пароль!");
             setTimeout(() => {
               setMessageAuth("");

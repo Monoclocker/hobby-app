@@ -6,7 +6,7 @@ import Alert from "@mui/material/Alert";
 import {useNavigate} from "react-router-dom";
 
 const MyModal = ({children, firstVisible, setFirstVisible}) => {
-    console.log(children, 228)
+
     const navigate = useNavigate();
 
     const [data, setData] = useState(children);
@@ -46,6 +46,7 @@ const MyModal = ({children, firstVisible, setFirstVisible}) => {
         if (photo) {
             data.photo = photo.image_preview
         }
+        data.links.indexOf(' ', 0) !== -1 ? data.links = data.links.split(' ') : data.links = [data.links];
         try {
             const response = RequestService.updateProfile(data);
             response.then(val => {
