@@ -9,13 +9,8 @@ const url = 'http://194.87.102.174';
 
 export default class RequestService {
     static async registration(userData) {
-<<<<<<< HEAD
         return await axios.post(url + '/Auth/Register', {
             ...userData,
-=======
-        return await axios.post(url + "/Auth/Register", {
-          ...userData
->>>>>>> 5afd8c7cda7c06de0f2c7bac1c602ad8f3b5e15b
         });
     }
 
@@ -28,9 +23,9 @@ export default class RequestService {
         localStorage.setItem('refreshToken', response.data['refreshToken']);
         config = {
             headers: {
-                Authorization:  "Bearer " + localStorage.getItem("accessToken"),
-            }
-        }
+                Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+            },
+        };
     }
 
     static async authorization(userData) {
@@ -48,7 +43,7 @@ export default class RequestService {
     }
 
     static async addUserToGroup(id, username) {
-        return await axios.post(url + `/Group/Add/${id}`, { ...username });
+        return await axios.post(url + `/Group/Add/${id}`, { username: username }, config);
     }
 
     static async removeUserFromGroup(id) {
@@ -56,7 +51,7 @@ export default class RequestService {
     }
 
     static async getUsersFromGroup(id) {
-        return await axios.get(url + `/Group/GetParticipants/${id}`);
+        return await axios.get(url + `/Group/GetParticipants/${id}`, config);
     }
 
     static async removeGroup(id) {

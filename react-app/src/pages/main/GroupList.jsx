@@ -11,7 +11,21 @@ const GroupList = () => {
 
     const [logIn, isLoading, eventError] = useFetching(async () => {
         const response = await RequestService.getAllGroups();
-        setListGroups([...response.data]);
+        const uniqueGroups = {};
+
+        response.data.forEach((group) => {
+            if (uniqueGroups[group.id]) {
+                if (group.isAdmin) {
+                    uniqueGroups[group.id] = group;
+                }
+            } else {
+                uniqueGroups[group.id] = group;
+            }
+        });
+
+        const uniqueGroupsArray = Object.values(uniqueGroups);
+
+        setListGroups([...uniqueGroupsArray]);
     });
 
     useEffect(() => {
@@ -27,7 +41,7 @@ const GroupList = () => {
                 ) : (
                     <div className="mb-4">
                         {listGroups.map((group) => (
-                            <Group key={group.id} id={group.id} name={group.groupName} />
+                            <Group key={group.id} id={group.id} name={group.groupName} isAdmin={group.isAdmin} />
                         ))}
                     </div>
                 )}
