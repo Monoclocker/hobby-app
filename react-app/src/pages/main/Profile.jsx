@@ -14,7 +14,7 @@ const Profile = () => {
             const response = await RequestService.getUserData();
                 if (response.status === 200) {
                     console.log(localStorage.getItem('accessToken'), 'aye');
-                    console.log(response.data, 100000000000000000000);
+                    console.log(response.data);
                     setProfileData(response.data);
                     localStorage.setItem('img', profileData['photo'])
                 }

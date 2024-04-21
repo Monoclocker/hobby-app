@@ -100,9 +100,11 @@ const Navbar = () => {
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex flex-shrink-0 items-center">
                             <img
-                                className="h-12 w-18"
+                                onClick={(e) => {navigate("/groups")}}
+                                className="h-12"
                                 src={"public/logo.svg"}
                                 alt="Your Company"
+                                style={{cursor: 'pointer', marginTop: "20%"}}
                             />
                         </div>
                         <div className="hidden sm:ml-6 sm:block">
@@ -188,7 +190,8 @@ const Navbar = () => {
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="user-menu-button"
-                                    tabIndex="-1"
+                                    style={{zIndex: 10}}
+
                                 >
                                     <Link
                                         to="/profile"
@@ -244,7 +247,7 @@ const Navbar = () => {
                             Группы
                         </Link>
                         <Link
-                            to="/messenger"
+                            to="/map"
                             className={
                                 activeLink === 2 ? classNameNavbar.activeLinkMobile : classNameNavbar.inactiveLinkMobile
                             }

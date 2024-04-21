@@ -54,6 +54,10 @@ export default class RequestService {
         return await axios.get(url + `/Group/GetParticipants/${id}`, config);
     }
 
+    static async getAllMapInfo() {
+        return await axios.get(url + '/Map/GetInfo', config);
+    }
+
     static async removeGroup(id) {
         return await axios.get(url + `/Group/Remove/${id}`);
     }

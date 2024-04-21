@@ -5,11 +5,32 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import {useFetching} from "../hooks/useFetching.js";
+import RequestService from "../api/RequestService.js";
+import {useNavigate} from "react-router-dom";
 
 const MapComponent = () => {
+    const navigate = useNavigate();
     const [currentPosition, setCurrentPosition] = useState([51.505, -0.09]);
     const [destination, setDestination] = useState([51.515, -0.1]); // Отдельная метка-цель
     const [markers, setMarkers] = useState([]);
+
+    const [fetchData, isDataLoading, dataError] = useFetching(async () => {
+        try {
+            const response = await RequestService.getAllMapInfo()
+            console.log(response)
+        } catch (e) {
+            if (e.response.status === 401) {
+                await RequestService.refreshToken();
+                console.log(e)
+            } else {
+                console.log(e)
+                // alert('Сервис временно недоступен :(')
+                // navigate("/login");
+            }
+        }
+
+    })
 
     useEffect(() => {
         if ("geolocation" in navigator) {
@@ -20,6 +41,7 @@ const MapComponent = () => {
                 console.error("Error Code = " + error.code + " - " + error.message);
             });
         }
+        fetchData();
     }, []);
 
     const AddMarker = () => {
@@ -65,8 +87,8 @@ const MapComponent = () => {
 
     return (
         <div>
-            <h1>Click map to add markers, click marker to remove, routes to one destination!</h1>
-            <MapContainer center={currentPosition} zoom={13} style={{ height: '400px', width: '100%' }}>
+            <h2 className="text-center text-indigo-900 text-xl font-bold leading-10 text-gray-900">Время куда-нибудь сходить 💫</h2>
+            <MapContainer center={currentPosition} zoom={13} style={{height: '400px', width: '100%', zIndex: 1, border: "none"}}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />

@@ -46,8 +46,8 @@ const MyModal = ({children, firstVisible, setFirstVisible}) => {
         if (photo) {
             data.photo = photo.image_preview
         }
-        data.links.indexOf(' ', 0) !== -1 ? data.links = data.links.split(' ') : data.links = [data.links];
         try {
+            data.links.indexOf(' ', 0) !== -1 ? data.links = data.links.split(' ') : data.links = data.links;
             const response = RequestService.updateProfile(data);
             response.then(val => {
                 if (val.status === 200) {
