@@ -163,6 +163,8 @@ namespace dotnetWebAPI.Services
             user.LastCoordinates.Latitude = coordinates[0];
             user.LastCoordinates.Longitude = coordinates[1];
 
+            dbContext.Users.Update(user);
+
             await dbContext.SaveChangesAsync();
 
         }
