@@ -11,24 +11,46 @@ import {useNavigate} from "react-router-dom";
 
 const MapComponent = () => {
     const navigate = useNavigate();
-    const [currentPosition, setCurrentPosition] = useState([51.505, -0.09]);
-    const [destination, setDestination] = useState([51.515, -0.1]); // Отдельная метка-цель
+    const [currentPosition, setCurrentPosition] = useState([47.2364, 39.7139]);
+    const [destination, setDestination] = useState([47.2364, 39.7139]); // Отдельная метка-цель
     const [markers, setMarkers] = useState([]);
+    const destinationMarkerColor = "#8c1414"
 
     const [fetchData, isDataLoading, dataError] = useFetching(async () => {
         try {
-            const response = await RequestService.getAllMapInfo()
+            navigator.geolocation.getCurrentPosition(async position => {
+                const newPos = [position.coords.latitude, position.coords.longitude];
+                const response = await RequestService.saveCurrentCoords(newPos);
+                console.log(response)
+            })
+            const response = await RequestService.getAllMapInfo();
+            let resultMarkers = [{lat: response.data['coordinates'][0], lng: response.data['coordinates'][1]}];
             console.log(response)
+            response.data['friends'].map((el) => {
+                resultMarkers.push({lat: el['coordinates'][0], lng: el['coordinates'][1]});
+            })
+            let valuableDestinations = [];
+            response.data['places'].map((place) => {
+                // valuableDestinations.push({lat: place.coordinates[1], lng: place.coordinates[0]});
+                valuableDestinations = place.coordinates
+            })
+            valuableDestinations.reverse();
+            console.log(resultMarkers)
+            console.log(valuableDestinations, 43434)
+
+            setDestination(valuableDestinations)
+            setMarkers(resultMarkers);
         } catch (e) {
             if (e.response.status === 401) {
                 await RequestService.refreshToken();
                 console.log(e)
             } else {
-                console.log(e)
+                console.log(e.response.status, 1243213421)
                 // alert('Сервис временно недоступен :(')
                 // navigate("/login");
             }
         }
+
 
     })
 
@@ -37,6 +59,7 @@ const MapComponent = () => {
             navigator.geolocation.getCurrentPosition(position => {
                 const newPos = [position.coords.latitude, position.coords.longitude];
                 setCurrentPosition(newPos);
+
             }, error => {
                 console.error("Error Code = " + error.code + " - " + error.message);
             });
@@ -93,11 +116,13 @@ const MapComponent = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {markers.map((marker, idx) =>
+
                     <Marker key={idx} position={marker} eventHandlers={{
                         click: () => handleMarkerClick(idx),
                     }}>
                         <Popup>A click on this popup will remove the marker!</Popup>
                     </Marker>
+
                 )}
                 <Marker position={destination}>
                     <Popup>This is the destination!</Popup>

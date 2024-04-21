@@ -176,7 +176,7 @@ const Navbar = () => {
                                     )}
                                     <img
                                         className="h-8 w-8 rounded-full"
-                                        src={localStorage.getItem('img')}
+                                        src={localStorage.getItem('img') !== "undefined" ? localStorage.getItem('img') : "public/default.png"}
                                         alt="profile_pic"
                                     />
                                 </button>

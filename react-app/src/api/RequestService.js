@@ -5,7 +5,7 @@ let config = {
         Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
     },
 };
-const url = 'http://194.87.102.174';
+const url = 'http://194.87.102.174:8080';
 
 export default class RequestService {
     static async registration(userData) {
@@ -55,7 +55,11 @@ export default class RequestService {
     }
 
     static async getAllMapInfo() {
-        return await axios.get(url + '/Map/GetInfo', config);
+        return await axios.post(url + '/Map/GetInfo', {}, config);
+    }
+
+    static async saveCurrentCoords(data) {
+        return await axios.post(url + '/Map/SaveCoordinates', {coords: data}, config);
     }
 
     static async removeGroup(id) {
