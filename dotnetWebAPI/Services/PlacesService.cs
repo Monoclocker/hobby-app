@@ -74,7 +74,7 @@ namespace dotnetWebAPI.Services
 
             List<PlaceDTO> result = new ();
 
-            places.RemoveAll(x => !x.Interests.Exists(x => interests.Contains(x.Name)));
+            var places_ = places.Where(x=>x.Interests.Exists(x=> interests.Exists(x=>interests.Contains(x))));
 
             foreach(Place place in places) 
             {
